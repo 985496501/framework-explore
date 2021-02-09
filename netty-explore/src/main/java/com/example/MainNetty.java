@@ -2,6 +2,8 @@ package com.example;
 
 /**
  * 继续探索netty
+ * netty分包 以及各个 层级的设计
+ * 是现在java 分布式项目 通信方面性能优秀的组件.
  *
  * todo: 服务的心跳机制与断线重连，Netty底层是怎么实现的?
  *

@@ -12,7 +12,7 @@ import org.junit.Test;
  * 可以学习它的接口设计。
  * <p>
  * <p>
- * Plain ordinary java object builder
+ * Plain ordinary java object builder.
  *
  * @author: Liu Jinyun
  * @date: 2021/2/17/0:22
@@ -53,6 +53,9 @@ public class Pojo {
     // 一般是通过一个静态内部类构造对象
     /**
      * 肯定是创建静态内部类对象 需要我们暴露一个静态的方法
+     * 这是一个最简单的 构建者 返回
+     * 通常框架中 这个方法 也常常 重载
+     * 并且 new Builder() 之后 进行了一定的配置.
      *
      * @return builder
      */

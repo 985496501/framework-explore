@@ -2,6 +2,7 @@ package org.example.function;
 
 import org.junit.Test;
 
+import java.util.function.Consumer;
 import java.util.function.Supplier;
 
 /**
@@ -31,4 +32,16 @@ public class FunctionTest {
     public static String hi() {
         return "hello toString";
     }
+
+    /**
+     * 消费者接口
+     * accept(T)
+     *
+     */
+    @Test
+    public void consumerTest() {
+        Consumer<Object> consumer = System.out::println;
+        consumer.accept("hello world");
+    }
+
 }

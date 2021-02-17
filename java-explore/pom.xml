@@ -22,5 +22,11 @@
             <artifactId>hutool-all</artifactId>
             <version>5.5.8</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+            <version>0.10</version>
+        </dependency>
     </dependencies>
 </project>

@@ -11,6 +11,8 @@ package org.example;
  */
 public class JavaMain {
     public static void main(String[] args) {
+        Object o = new Object();
+        // java object layout
 
     }
 }

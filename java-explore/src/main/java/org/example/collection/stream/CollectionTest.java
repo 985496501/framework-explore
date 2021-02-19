@@ -17,11 +17,8 @@ public class CollectionTest {
     String[] arr = new String[]{"a", "b", "c", "d"};
 
     /**
-     *
-     // Replace all lists with unmodifiable lists containing unique elements
-     result.replaceAll((factoryType, implementations) -> implementations.stream().distinct()
-     .collect(Collectors.collectingAndThen(Collectors.toList(), Collections::unmodifiableList)));
-     *
+     * 开发中常常使用这个流
+     * 用的时候 学习一下
      */
     @Test
     public void mapTest() {

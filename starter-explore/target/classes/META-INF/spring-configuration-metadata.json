@@ -1,0 +1,22 @@
+{
+  "groups": [
+    {
+      "name": "demo",
+      "type": "org.example.properties.DemoProperties",
+      "sourceType": "org.example.properties.DemoProperties"
+    }
+  ],
+  "properties": [
+    {
+      "name": "demo.method",
+      "type": "java.lang.String",
+      "sourceType": "org.example.properties.DemoProperties"
+    },
+    {
+      "name": "demo.url",
+      "type": "java.lang.String",
+      "sourceType": "org.example.properties.DemoProperties"
+    }
+  ],
+  "hints": []
+}

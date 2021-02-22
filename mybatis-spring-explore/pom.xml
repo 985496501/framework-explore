@@ -16,17 +16,24 @@
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <mysql-jdbc-driver.version>8.0.22</mysql-jdbc-driver.version>
+        <spring-boot.version>2.4.0</spring-boot.version>
+        <mybatis.version>2.1.4</mybatis.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <!--直接使用springboot的统一版本控制-->
             <dependency>
                 <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-starter-parent</artifactId>
-                <version>2.4.0</version>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
+
+
+            <!--这里可直接依赖 springcloud 的版本控制-->
+            <!--这里可直接依赖 springcloudAlibaba 的版本控制-->
         </dependencies>
     </dependencyManagement>
 
@@ -39,12 +46,13 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
-            <version>2.4.0</version>
         </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
+            <!--热部署的工具类, 不参与依赖传递-->
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -52,11 +60,10 @@
             <artifactId>spring-boot-configuration-processor</artifactId>
         </dependency>
 
-
         <dependency>
             <groupId>org.mybatis.spring.boot</groupId>
             <artifactId>mybatis-spring-boot-starter</artifactId>
-            <version>2.1.4</version>
+            <version>${mybatis.version}</version>
         </dependency>
 
         <dependency>
@@ -69,6 +76,8 @@
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>${mysql-jdbc-driver.version}</version>
+            <!--对象域： 只有测试和运行才会加载classpath下这个jar, 会被打包-->
+            <scope>runtime</scope>
         </dependency>
 
         <dependency>

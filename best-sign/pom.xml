@@ -24,6 +24,8 @@
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>${lombok.version}</version>
+            <!--只在编译和测试阶段有效，不会被打包, 可以由调用的容器提供-->
+            <scope>provided</scope>
         </dependency>
 
         <dependency>

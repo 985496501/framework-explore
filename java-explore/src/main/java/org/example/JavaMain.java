@@ -11,15 +11,15 @@ package org.example;
  * @date: 2021/2/1
  */
 public class JavaMain {
+
     public static void main(String[] args) {
         Object o = new Object();
 //        LockSupport.getBlocker()
         // java object layout
         for (; ; ) {
-
+            break;
         }
-
-
-
     }
+
+
 }

@@ -2,43 +2,32 @@ package org.example.contract.pojo;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 
 @Data
 @NoArgsConstructor
-public class PersonalRegister {
-    private String account;
-    private String name;
-    private String userType;
-    private String applyCert;
+@EqualsAndHashCode(callSuper = true)
+public class PersonalRegister extends Register {
     private Credential credential;
 
     public void setCredential(String identity) {
         this.credential = new Credential(identity);
     }
 
-    public PersonalRegister(String account, String name, String userType, String applyCert, String identity) {
+    public PersonalRegister(String account, String name, String identity) {
+        this.credential = new Credential(identity);
         this.account = account;
         this.name = name;
-        this.userType = userType;
-        this.applyCert = applyCert;
-        this.credential = new Credential(identity);
+        this.userType = "1";
+        this.applyCert = "1";
     }
 
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    static class Credential {
+    public static class Credential {
         private String identity;
-
-        public String getIdentity() {
-            return identity;
-        }
-
-        public void setIdentity(String identity) {
-            this.identity = identity;
-        }
     }
-
 }

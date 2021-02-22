@@ -11,14 +11,10 @@ import org.example.contract.constant.MethodEnum;
 import org.example.contract.util.RSAUtils;
 
 
-/**
- * PersonalRegister pr = new PersonalRegister("17862328960", "刘津运",
- * "1", "1", "370481199607143214");
- * <p>
- * 161391959101000002
- */
 @Slf4j
 public class HttpClient {
+
+    private static final String URL_SIGN_PARAM = "?developerId=%s&rtick=%s&signType=rsa&sign=%s";
 
     private static final String SUCCESS = "errno";
 
@@ -28,7 +24,6 @@ public class HttpClient {
 
     private final String serverHost;
 
-    private static final String URL_SIGN_PARAM = "?developerId=%s&rtick=%s&signType=rsa&sign=%s";
 
     public HttpClient(String developerId, String privateKey, String serverHost) {
         this.developerId = developerId;
@@ -36,13 +31,18 @@ public class HttpClient {
         this.serverHost = serverHost;
     }
 
+    public <T> T post(MethodEnum methodEnum, Object obj, Class<T> resultType) {
+        log.info("request method: {}, \n request: \n{}", methodEnum.getMethod(), JSONUtil.toJsonPrettyStr(obj));
+        return post(methodEnum, JSONUtil.toJsonStr(obj), resultType);
+    }
+
     public <T> T post(MethodEnum methodEnum, String jsonStr, Class<T> resultType) {
         String rtick = RSAUtils.getRtick();
         String sign = RSAUtils.calcRsaSign(developerId, privateKey, serverHost,
-                MethodEnum.PERSONAL_REGISTER.getMethod(), rtick,
-                null, jsonStr);
+                methodEnum.getMethod(), rtick, null, jsonStr);
+
         String path = String.format(URL_SIGN_PARAM, developerId, rtick, sign);
-        String url = serverHost + MethodEnum.PERSONAL_REGISTER.getMethod() + path;
+        String url = serverHost + methodEnum.getMethod() + path;
         HttpResponse httpResponse = HttpUtil.createPost(url).body(jsonStr, ContentType.JSON.getValue()).execute();
         String body = httpResponse.body();
         if (httpResponse.getStatus() != HttpStatus.HTTP_OK) {
@@ -54,6 +54,7 @@ public class HttpClient {
             if (userObj.getInt(SUCCESS) == 0) {
                 JSONObject data = userObj.getJSONObject("data");
                 if (data != null) {
+                    log.info("response: \n{}", data.toStringPretty());
                     return JSONUtil.toBean(data, resultType);
                 }
             } else {

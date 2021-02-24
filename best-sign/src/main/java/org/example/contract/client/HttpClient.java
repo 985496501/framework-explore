@@ -32,7 +32,7 @@ public class HttpClient {
     }
 
     public <T> T post(MethodEnum methodEnum, Object obj, Class<T> resultType) {
-        log.info("request method: {}, \n request: \n{}", methodEnum.getMethod(), JSONUtil.toJsonPrettyStr(obj));
+        //log.info("request method: {}, \n request: \n{}", methodEnum.getMethod(), JSONUtil.toJsonPrettyStr(obj));
         return post(methodEnum, JSONUtil.toJsonStr(obj), resultType);
     }
 

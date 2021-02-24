@@ -24,6 +24,7 @@ public class AppEnvConfig {
 
     @Bean
     public ContractApi contractApi(HttpClient httpClient) {
+        // 使用代理对象
         return new ContractApiImpl(httpClient);
     }
 }

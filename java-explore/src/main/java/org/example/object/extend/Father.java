@@ -1,4 +1,4 @@
-package org.example.extend;
+package org.example.object.extend;
 
 import lombok.Data;
 

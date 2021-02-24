@@ -1,0 +1,5 @@
+org\example\config\DemoConfig.class
+org\example\MainStarter.class
+META-INF\spring-configuration-metadata.json
+org\example\client\RadicalClient.class
+org\example\properties\DemoProperties.class

@@ -3,7 +3,11 @@ package org.example.contract.api.impl;
 import org.example.contract.api.ContractApi;
 import org.example.contract.client.HttpClient;
 import org.example.contract.constant.MethodEnum;
-import org.example.contract.pojo.*;
+import org.example.contract.pojo.reponse.FidResult;
+import org.example.contract.pojo.reponse.NotifyResult;
+import org.example.contract.pojo.reponse.RegisterResult;
+import org.example.contract.pojo.reponse.UrlResult;
+import org.example.contract.pojo.request.*;
 
 /**
  * log aop
@@ -43,7 +47,22 @@ public class ContractApiImpl implements ContractApi {
     }
 
     @Override
-    public String uploadAndCreateContract(UploadContract uc) {
+    public String uploadContractTemplate(UploadContractTemplate uc) {
+        return httpClient.post(MethodEnum.UPLOAD_CONTRACT_TEMPLATE, uc, FidResult.class).getFid();
+    }
+
+    @Override
+    public String addPdfElements(AddPdfElements ape) {
+       return httpClient.post(MethodEnum.ADD_PDF_ELEMENTS, ape, FidResult.class).getFid();
+    }
+
+    @Override
+    public String createContract(CreateContract cc) {
+        return httpClient.post(MethodEnum.CREATE_CONTRACT, cc, String.class);
+    }
+
+    @Override
+    public String uploadAndCreateContract(UploadAndCreateContract uc) {
         return httpClient.post(MethodEnum.UPLOAD_AND_CREATE_CONTRACT, uc, String.class);
     }
 
@@ -63,6 +82,11 @@ public class ContractApiImpl implements ContractApi {
     }
 
     @Override
+    public String sendContract(SendContract sc) {
+        return httpClient.post(MethodEnum.SEND_CONTRACT, sc, UrlResult.class).getUrl();
+    }
+
+    @Override
     public void autoSignWithVerification(AutoSignWithVerification aswv) {
         httpClient.post(MethodEnum.AUTO_SIGN_WITH_VERIFICATION, aswv, String.class);
     }
@@ -74,6 +98,12 @@ public class ContractApiImpl implements ContractApi {
 
     @Override
     public String previewContract(PreviewContract pc) {
-        return httpClient.post(MethodEnum.PREVIEW_CONTRACT, pc, String.class);
+        return httpClient.post(MethodEnum.PREVIEW_CONTRACT, pc, UrlResult.class).getUrl();
+    }
+
+    @Override
+    public void unifiedNotifyHandler(NotifyResult result, String sign, String rtick) {
+        // todo: 签名校验 先不做
+        // SpringContextFacade.getBean(ContractActionCallback.class).callback(result.getParams());
     }
 }

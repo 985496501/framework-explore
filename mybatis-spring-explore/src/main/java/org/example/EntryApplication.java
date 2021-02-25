@@ -1,14 +1,21 @@
 package org.example;
 
+import cn.hutool.json.JSONUtil;
 import org.example.client.RadicalClient;
-import org.junit.Test;
+import org.example.contract.PrintDelegate;
+import org.example.contract.api.ContractActionCallback;
+import org.example.contract.api.ContractApi;
+import org.example.contract.pojo.reponse.NotifyResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * SpringBoot Entry.
@@ -20,7 +27,6 @@ import org.springframework.web.socket.config.annotation.EnableWebSocket;
  */
 
 @EnableWebSocket
-@RequestMapping("main")
 @RestController
 @SpringBootApplication
 public class EntryApplication {
@@ -30,6 +36,14 @@ public class EntryApplication {
 
     @Autowired
     private RadicalClient radicalClient;
+    @Autowired
+    ContractActionCallback contractActionCallback;
+
+    @Autowired
+    ContractApi contractApi;
+
+    @Autowired
+    PrintDelegate printDelegate;
 
     @GetMapping
     public String getMsg() {
@@ -37,10 +51,12 @@ public class EntryApplication {
     }
 
 
-    @Test
-    public void classNameTest() {
-        String name = EntryApplication.class.getName();
-        System.out.println(name);
-        // org.example.EntryApplication
+    @PostMapping("callback")
+    public void signContractCallback(HttpServletRequest request, @RequestBody NotifyResult notifyResult) {
+        System.out.println(request.getHeader("rtick"));
+        System.out.println(request.getHeader("sign"));
+        System.out.println(JSONUtil.toJsonPrettyStr(notifyResult));
+
+        contractApi.unifiedNotifyHandler(notifyResult, "", "");
     }
 }

@@ -15,6 +15,12 @@ public enum MethodEnum {
 
     CREATE_ENTERPRISE_SIGNATURE("/dist/signatureImage/ent/create/"),
 
+    UPLOAD_CONTRACT_TEMPLATE("/storage/upload/"),
+
+    ADD_PDF_ELEMENTS("/storage/addPdfElements/"),
+
+    CREATE_CONTRACT("/contract/create/"),
+
     UPLOAD_AND_CREATE_CONTRACT("/storage/contract/upload/"),
 
     ADD_SINGER("/contract/addSigner/"),
@@ -22,6 +28,8 @@ public enum MethodEnum {
     BATCH_ADD_SINGERS("/contract/addSigners/"),
 
     SEND_SMS("/contract/sendSignVCode/"),
+
+    SEND_CONTRACT("/contract/send"),
 
     AUTO_SIGN_WITH_VERIFICATION("/storage/contract/sign/cert2/"),
 

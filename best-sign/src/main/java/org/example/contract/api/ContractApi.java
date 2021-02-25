@@ -3,7 +3,8 @@ package org.example.contract.api;
 import org.example.contract.annotation.HttpDelegate;
 import org.example.contract.annotation.Post;
 import org.example.contract.client.HttpClient;
-import org.example.contract.pojo.*;
+import org.example.contract.pojo.reponse.NotifyResult;
+import org.example.contract.pojo.request.*;
 
 /**
  * 直接使用这个接口即可
@@ -67,6 +68,34 @@ public interface ContractApi {
     @Post("/dist/signatureImage/ent/create/")
     void createEnterpriseSignature(CreateSignature cs);
 
+
+    /**
+     * Merely upload contract template file to the remote Oss.
+     *
+     * @param uc p
+     * @return fid
+     */
+    @Post("/storage/upload/")
+    String uploadContractTemplate(UploadContractTemplate uc);
+
+    /**
+     * Populate specified fid with specified elements.
+     *
+     * @param ape p
+     * @return new fid to create contract.
+     */
+    @Post("/storage/addPdfElements/")
+    String addPdfElements(AddPdfElements ape);
+
+    /**
+     * Merely create contract to procession.
+     *
+     * @param cc p
+     * @return fid
+     */
+    @Post("/contract/create/")
+    String createContract(CreateContract cc);
+
     /**
      * Upload and create a contract.
      *
@@ -74,7 +103,7 @@ public interface ContractApi {
      * @return contract id
      */
     @Post("/storage/contract/upload/")
-    String uploadAndCreateContract(UploadContract uc);
+    String uploadAndCreateContract(UploadAndCreateContract uc);
 
     /**
      * Add signer.
@@ -100,6 +129,15 @@ public interface ContractApi {
     @Post("/contract/sendSignVCode/")
     void sendSms(SendSms ss);
 
+
+    /**
+     * Send contract.
+     *
+     * @param sc p
+     */
+    @Post("/contract/send")
+    String sendContract(SendContract sc);
+
     /**
      * Automatically sign with sms code review.
      *
@@ -124,4 +162,11 @@ public interface ContractApi {
      */
     @Post("/contract/getPreviewURL/")
     String previewContract(PreviewContract pc);
+
+    /**
+     * unified notification call back handler.
+     * 自行实现。
+     */
+    @Deprecated
+    void unifiedNotifyHandler(NotifyResult notifyResult, String sign, String rtick);
 }

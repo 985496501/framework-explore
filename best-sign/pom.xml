@@ -4,11 +4,11 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>org.example</groupId>
-    <version>1.0-SNAPSHOT</version>
+    <groupId>cc.jinyun</groupId>
+    <version>1.0</version>
     <artifactId>bestsign-spring-boot-starter</artifactId>
     <packaging>jar</packaging>
-    <description>电子合同 3000</description>
+    <description>电子合同</description>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>

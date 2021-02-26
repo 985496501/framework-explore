@@ -1,1 +1,1 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=org.example.contract.config.AppEnvConfig
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=cc.jinyun.contract.config.AppEnvConfig

@@ -30,8 +30,6 @@
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
-
-
             <!--这里可直接依赖 springcloud 的版本控制-->
             <!--这里可直接依赖 springcloudAlibaba 的版本控制-->
         </dependencies>
@@ -132,4 +130,5 @@
             </plugin>
         </plugins>
     </build>
+
 </project>

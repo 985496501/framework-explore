@@ -2,10 +2,10 @@ package org.example;
 
 import cn.hutool.json.JSONUtil;
 import org.example.client.RadicalClient;
-import org.example.contract.PrintDelegate;
-import org.example.contract.api.ContractActionCallback;
-import org.example.contract.api.ContractApi;
-import org.example.contract.pojo.reponse.NotifyResult;
+import cc.jinyun.contract.PrintDelegate;
+import cc.jinyun.contract.api.ContractActionCallback;
+import cc.jinyun.contract.api.ContractApi;
+import cc.jinyun.contract.pojo.reponse.NotifyResult;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

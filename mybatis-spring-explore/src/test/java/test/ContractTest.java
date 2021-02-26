@@ -1,5 +1,6 @@
 package test;
 
+import cc.jinyun.contract.pojo.request.*;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.io.FastByteArrayOutputStream;
 import cn.hutool.core.io.FileUtil;
@@ -7,11 +8,10 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.json.JSONUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.example.EntryApplication;
-import org.example.contract.api.ContractApi;
-import org.example.contract.pojo.other.CharPosition;
-import org.example.contract.pojo.other.PdfPageContentPositions;
-import org.example.contract.pojo.request.*;
-import org.example.contract.util.PdfUtils;
+import cc.jinyun.contract.api.ContractApi;
+import cc.jinyun.contract.pojo.other.CharPosition;
+import cc.jinyun.contract.pojo.other.PdfPageContentPositions;
+import cc.jinyun.contract.util.PdfUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

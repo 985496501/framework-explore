@@ -1,6 +1,8 @@
 package org.example.pattern.singleton;
 
 /**
+ * singleton pattern.
+ *
  * @author: Liu Jinyun
  * @date: 2021/2/13/14:41
  */
@@ -8,15 +10,26 @@ public class SingletonTest {
 
     /**
      * 最简单的饿汉式单例模式
+     * hungry-singleton pattern
      */
     public static class HungrySingleton {
-        private static final HungrySingleton instance = new HungrySingleton();
+        static class HungrySingletonHolder {
+            private static final HungrySingleton SINGLETON = new HungrySingleton();
+        }
 
         public static HungrySingleton getInstance() {
-            return instance;
+            return HungrySingletonHolder.SINGLETON;
         }
 
         private HungrySingleton() {}
+
+        public static void sayHello () {
+            System.out.println("hello");
+        }
+    }
+
+    public static void main(String[] args) {
+        HungrySingleton.sayHello();
     }
 
     public static class LazySingleton {

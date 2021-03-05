@@ -1,26 +1,16 @@
 package org.example;
 
-import cn.hutool.json.JSONUtil;
-import org.example.client.RadicalClient;
-import cc.jinyun.contract.PrintDelegate;
-import cc.jinyun.contract.api.ContractActionCallback;
-import cc.jinyun.contract.api.ContractApi;
-import cc.jinyun.contract.pojo.reponse.NotifyResult;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 
-import javax.servlet.http.HttpServletRequest;
+import java.util.Arrays;
+import java.util.concurrent.locks.LockSupport;
 
 /**
  * SpringBoot Entry.
- *
- *
  *
  * @author: jinyun
  * @date: 2021/2/8
@@ -31,32 +21,30 @@ import javax.servlet.http.HttpServletRequest;
 @SpringBootApplication
 public class EntryApplication {
     public static void main(String[] args) {
+        // false
+        //-Dmyname=jinyunliu
+        //[--server.port=7777]
+        System.out.println(Thread.currentThread().isDaemon());
+        System.out.println("-Dmyname=" +System.getProperty("myname"));
+        System.out.println(Arrays.toString(args));
+
+        System.out.println("\n\n\n\n\n\n\n\n");
         SpringApplication.run(EntryApplication.class, args);
     }
 
-    @Autowired
-    private RadicalClient radicalClient;
-    @Autowired
-    ContractActionCallback contractActionCallback;
+    private Thread thread;
 
-    @Autowired
-    ContractApi contractApi;
-
-    @Autowired
-    PrintDelegate printDelegate;
-
-    @GetMapping
-    public String getMsg() {
-        return radicalClient.exchange();
+    @GetMapping("/first")
+    public String first() {
+        thread = Thread.currentThread();
+        System.out.println(thread.getName());
+        LockSupport.park();
+        return "first thread";
     }
 
-
-    @PostMapping("callback")
-    public void signContractCallback(HttpServletRequest request, @RequestBody NotifyResult notifyResult) {
-        System.out.println(request.getHeader("rtick"));
-        System.out.println(request.getHeader("sign"));
-        System.out.println(JSONUtil.toJsonPrettyStr(notifyResult));
-
-        contractApi.unifiedNotifyHandler(notifyResult, "", "");
+    @GetMapping("/second")
+    public String second() {
+        LockSupport.unpark(thread);
+        return "second thread";
     }
 }

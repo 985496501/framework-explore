@@ -1,0 +1,4 @@
+org.springframework.boot.Bootstrapper=org.example.bootrap.CustomBootstrapper
+
+
+org.springframework.boot.SpringApplicationRunListener=org.example.listener.CustomListener

@@ -3,10 +3,7 @@ package cc.jinyun.contract.api.impl;
 import cc.jinyun.contract.api.ContractApi;
 import cc.jinyun.contract.client.HttpClient;
 import cc.jinyun.contract.constant.MethodEnum;
-import cc.jinyun.contract.pojo.reponse.FidResult;
-import cc.jinyun.contract.pojo.reponse.NotifyResult;
-import cc.jinyun.contract.pojo.reponse.RegisterResult;
-import cc.jinyun.contract.pojo.reponse.UrlResult;
+import cc.jinyun.contract.pojo.reponse.*;
 import cc.jinyun.contract.pojo.request.*;
 
 /**
@@ -52,8 +49,13 @@ public class ContractApiImpl implements ContractApi {
     }
 
     @Override
+    public String createContractPdf(CreateContractPdf contractPdf) {
+        return httpClient.post(MethodEnum.CREATE_CONTRACT_PDF, contractPdf, TemplateTokenResult.class).getTemplateToken();
+    }
+
+    @Override
     public String addPdfElements(AddPdfElements ape) {
-       return httpClient.post(MethodEnum.ADD_PDF_ELEMENTS, ape, FidResult.class).getFid();
+        return httpClient.post(MethodEnum.ADD_PDF_ELEMENTS, ape, FidResult.class).getFid();
     }
 
     @Override

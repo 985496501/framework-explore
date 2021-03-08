@@ -19,6 +19,8 @@ public enum MethodEnum {
 
     ADD_PDF_ELEMENTS("/storage/addPdfElements/"),
 
+    CREATE_CONTRACT_PDF("/template/createContractPdf/"),
+
     CREATE_CONTRACT("/contract/create/"),
 
     UPLOAD_AND_CREATE_CONTRACT("/storage/contract/upload/"),

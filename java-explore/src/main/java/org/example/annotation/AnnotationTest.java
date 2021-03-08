@@ -1,7 +1,11 @@
 package org.example.annotation;
 
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import org.junit.Test;
 
+import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 
 /**
@@ -40,10 +44,22 @@ public class AnnotationTest {
         }
     }
 
-
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     static class SampleBean {
         @Map("resourceUrl")
         private String url;
+    }
+
+
+    @Test
+    public void getAnnotationsFromClassTest() {
+        // Derive annotations from the given object of class that's attached.
+        Annotation[] annotations = SampleBean.class.getAnnotations();
+        for (int i = 0; i < annotations.length; i++) {
+            System.out.println(annotations[i].annotationType().getCanonicalName());
+        }
     }
 
 }

@@ -78,6 +78,9 @@ public interface ContractApi {
     @Post("/storage/upload/")
     String uploadContractTemplate(UploadContractTemplate uc);
 
+
+    String createContractPdf(CreateContractPdf contractPdf);
+
     /**
      * Populate specified fid with specified elements.
      *

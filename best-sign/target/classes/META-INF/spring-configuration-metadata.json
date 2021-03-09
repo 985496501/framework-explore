@@ -10,16 +10,25 @@
     {
       "name": "app.developer.develop-id",
       "type": "java.lang.String",
+      "description": "开发id",
       "sourceType": "cc.jinyun.contract.config.AppProperties"
     },
     {
       "name": "app.developer.private-key",
       "type": "java.lang.String",
+      "description": "密钥",
+      "sourceType": "cc.jinyun.contract.config.AppProperties"
+    },
+    {
+      "name": "app.developer.push-url",
+      "type": "java.lang.String",
+      "description": "合同签署的回调地址",
       "sourceType": "cc.jinyun.contract.config.AppProperties"
     },
     {
       "name": "app.developer.server-host",
       "type": "java.lang.String",
+      "description": "请求主机域名",
       "sourceType": "cc.jinyun.contract.config.AppProperties"
     }
   ],

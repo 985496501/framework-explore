@@ -5,8 +5,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>cc.jinyun</groupId>
-    <version>1.0</version>
     <artifactId>bestsign-spring-boot-starter</artifactId>
+    <version>1.0</version>
     <packaging>jar</packaging>
     <description>电子合同</description>
 

@@ -1,8 +1,8 @@
-package cc.jinyun.contract.api.impl;
+package cc.jinyun.contract.internal.impl;
 
-import cc.jinyun.contract.api.ContractApi;
 import cc.jinyun.contract.client.HttpClient;
 import cc.jinyun.contract.constant.MethodEnum;
+import cc.jinyun.contract.internal.ContractApi;
 import cc.jinyun.contract.pojo.reponse.*;
 import cc.jinyun.contract.pojo.request.*;
 
@@ -49,8 +49,28 @@ public class ContractApiImpl implements ContractApi {
     }
 
     @Override
-    public String createContractPdf(CreateContractPdf contractPdf) {
+    public String generateContractFileByTemplate(CreateContractPdf contractPdf) {
         return httpClient.post(MethodEnum.CREATE_CONTRACT_PDF, contractPdf, TemplateTokenResult.class).getTemplateToken();
+    }
+
+    @Override
+    public String createContractByFile(CreateContractByFile contractByFile) {
+        return httpClient.post(MethodEnum.CREATE_CONTRACT_BY_FILE, contractByFile, ContractId.class).getContractId();
+    }
+
+    @Override
+    public void automaticallySignByTemplateVals(AutomaticallySignByTemplateVal templateVal) {
+        httpClient.post(MethodEnum.AUTOMATICALLY_SIGN_BY_TEMPLATE_VALS, templateVal, String.class);
+    }
+
+    @Override
+    public String manuallySignByTemplateVals(ManuallySignByTemplateVal manuallySignByTemplateVal) {
+        return httpClient.post(MethodEnum.MANUAL_SIGN_BY_TEMPLATE_VARS, manuallySignByTemplateVal, BiUrlResult.class).getShortUrl();
+    }
+
+    @Override
+    public String uploadPdfTemplate(UploadPdfTemplate uploadPdfTemplate) {
+        return httpClient.post(MethodEnum.UPLOAD_CONTRACT_TEMPLATE, uploadPdfTemplate, TidResult.class).getTid();
     }
 
     @Override

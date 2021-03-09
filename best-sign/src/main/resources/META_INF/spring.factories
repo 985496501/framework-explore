@@ -1,1 +1,0 @@
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=cc.jinyun.contract.config.AppEnvConfig

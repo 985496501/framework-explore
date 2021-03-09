@@ -1,4 +1,4 @@
-package cc.jinyun.contract.context;
+package cc.jinyun.contract.external;
 
 
 public interface UserDetailService {

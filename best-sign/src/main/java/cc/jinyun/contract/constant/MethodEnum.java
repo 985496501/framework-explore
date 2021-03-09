@@ -21,7 +21,15 @@ public enum MethodEnum {
 
     CREATE_CONTRACT_PDF("/template/createContractPdf/"),
 
+    CREATE_CONTRACT_BY_FILE("/contract/createByTemplate/"),
+
+    AUTOMATICALLY_SIGN_BY_TEMPLATE_VALS("/contract/sign/template/"),
+
+    MANUAL_SIGN_BY_TEMPLATE_VARS("/contract/sendByTemplate/"),
+
     CREATE_CONTRACT("/contract/create/"),
+
+    UPLOAD_PDF_CREATE_TEMPLATE("/dist/template/upload/"),
 
     UPLOAD_AND_CREATE_CONTRACT("/storage/contract/upload/"),
 

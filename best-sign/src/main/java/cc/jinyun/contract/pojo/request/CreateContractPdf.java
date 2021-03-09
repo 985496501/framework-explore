@@ -1,12 +1,12 @@
 package cc.jinyun.contract.pojo.request;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class CreateContractPdf {
@@ -14,18 +14,17 @@ public class CreateContractPdf {
 
     private String tid;
 
-    private List<TemplateValue> templateValues;
+    private TemplateValue templateValues;
 
     @Data
+    @Builder
     @AllArgsConstructor
     @NoArgsConstructor
     public static class TemplateValue {
-//        private String userName;
-//        private String companyName;
-//
-//        private String userDate;
-//        private String companyDate;
+        private String userName;
+        private String userDate;
 
-
+        private String companyName;
+        private String companyDate;
     }
 }

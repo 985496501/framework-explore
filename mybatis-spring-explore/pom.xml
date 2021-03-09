@@ -76,11 +76,11 @@
             <version>${mybatis.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.example</groupId>
-            <artifactId>starter-explore</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.example</groupId>-->
+<!--            <artifactId>starter-explore</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>mysql</groupId>
@@ -95,11 +95,11 @@
             <artifactId>spring-boot-starter-websocket</artifactId>
         </dependency>
 
-<!--        <dependency>-->
-<!--            <groupId>org.example</groupId>-->
-<!--            <artifactId>bestsign-spring-boot-starter</artifactId>-->
-<!--            <version>1.0-SNAPSHOT</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>cc.jinyun</groupId>
+            <artifactId>bestsign-spring-boot-starter</artifactId>
+            <version>1.0</version>
+        </dependency>
 
         <!--https://github.com/Sayi/poi-tl-->
         <dependency>
@@ -114,23 +114,6 @@
             <version>${hutool.version}</version>
         </dependency>
 
-        <!--集成一个诊断工具 供学习内部细节 建议使用web console-->
-<!--        <dependency>-->
-<!--            <groupId>com.taobao.arthas</groupId>-->
-<!--            <artifactId>arthas-spring-boot-starter</artifactId>-->
-<!--            <version>3.4.6</version>-->
-<!--        </dependency>-->
-
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-actuator</artifactId>-->
-<!--        </dependency>-->
-
-        <dependency>
-            <groupId>ltd.light-chain</groupId>
-            <artifactId>light-chain-redis</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
 
     <build>

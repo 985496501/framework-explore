@@ -1,27 +1,8 @@
-package cc.jinyun.contract.api;
+package cc.jinyun.contract.internal;
 
-import cc.jinyun.contract.annotation.HttpDelegate;
-import cc.jinyun.contract.annotation.Post;
-import cc.jinyun.contract.client.HttpClient;
 import cc.jinyun.contract.pojo.reponse.NotifyResult;
 import cc.jinyun.contract.pojo.request.*;
 
-/**
- * 直接使用这个接口即可
- * 即使不需要
- * 1.可插拔的注解支持，包括Feign注解和JAX-RS注解。
- * 2.支持可插拔的HTTP编码器和解码器（Gson，Jackson，Sax，JAXB，JAX-RS，SOAP）。
- * 3.支持Hystrix和它的Fallback。
- * 4.支持Ribbon的负载均衡。
- * 5.支持HTTP请求和响应的压缩。
- * 6.灵活的配置：基于 name 粒度进行配置
- * 7.支持多种客户端：JDK URLConnection、apache httpclient、okhttp，ribbon）
- * 8.支持日志
- * 9.支持错误重试
- * 10.url支持占位符
- * 11.可以不依赖注册中心独立运行
- */
-@HttpDelegate(delegate = HttpClient.class)
 public interface ContractApi {
 
     /**
@@ -30,7 +11,6 @@ public interface ContractApi {
      * @param pr p
      * @return r  taskId
      */
-    @Post("/user/reg/")
     String register(Register pr);
 
     /**
@@ -39,7 +19,6 @@ public interface ContractApi {
      * @param pr p
      * @return r  taskId
      */
-    @Post("/user/reg/")
     String enterpriseRegister(Register pr);
 
     /**
@@ -49,7 +28,6 @@ public interface ContractApi {
      * @return s
      * @see QueryRegister.RegisterEnum
      */
-    @Post("/user/async/applyCert/status/")
     boolean queryRegister(QueryRegister qr);
 
     /**
@@ -57,7 +35,6 @@ public interface ContractApi {
      *
      * @param cs p
      */
-    @Post("/signatureImage/user/create/")
     void createPersonalSignature(CreateSignature cs);
 
     /**
@@ -65,7 +42,6 @@ public interface ContractApi {
      *
      * @param cs p
      */
-    @Post("/dist/signatureImage/ent/create/")
     void createEnterpriseSignature(CreateSignature cs);
 
 
@@ -75,11 +51,23 @@ public interface ContractApi {
      * @param uc p
      * @return fid
      */
-    @Post("/storage/upload/")
     String uploadContractTemplate(UploadContractTemplate uc);
 
+    // -----------------------------------------------------------------
 
-    String createContractPdf(CreateContractPdf contractPdf);
+    String generateContractFileByTemplate(CreateContractPdf contractPdf);
+
+
+    String createContractByFile(CreateContractByFile contractByFile);
+
+    void automaticallySignByTemplateVals(AutomaticallySignByTemplateVal templateVal);
+
+    String manuallySignByTemplateVals(ManuallySignByTemplateVal manuallySignByTemplateVal);
+
+    // -----------------------------------------------------------------
+
+
+    String uploadPdfTemplate(UploadPdfTemplate uploadPdfTemplate);
 
     /**
      * Populate specified fid with specified elements.
@@ -87,7 +75,6 @@ public interface ContractApi {
      * @param ape p
      * @return new fid to create contract.
      */
-    @Post("/storage/addPdfElements/")
     String addPdfElements(AddPdfElements ape);
 
     /**
@@ -96,7 +83,6 @@ public interface ContractApi {
      * @param cc p
      * @return fid
      */
-    @Post("/contract/create/")
     String createContract(CreateContract cc);
 
     /**
@@ -105,7 +91,6 @@ public interface ContractApi {
      * @param uc p
      * @return contract id
      */
-    @Post("/storage/contract/upload/")
     String uploadAndCreateContract(UploadAndCreateContract uc);
 
     /**
@@ -113,7 +98,6 @@ public interface ContractApi {
      *
      * @param as p
      */
-    @Post("/storage/contract/upload/")
     void addSigner(AddSigner as);
 
     /**
@@ -121,7 +105,6 @@ public interface ContractApi {
      *
      * @param ass p
      */
-    @Post("/storage/contract/upload/")
     void addSigners(AddSigners ass);
 
     /**
@@ -129,7 +112,6 @@ public interface ContractApi {
      *
      * @param ss p
      */
-    @Post("/contract/sendSignVCode/")
     void sendSms(SendSms ss);
 
 
@@ -138,7 +120,6 @@ public interface ContractApi {
      *
      * @param sc p
      */
-    @Post("/contract/send")
     String sendContract(SendContract sc);
 
     /**
@@ -146,7 +127,6 @@ public interface ContractApi {
      *
      * @param aswv p
      */
-    @Post("/storage/contract/sign/cert2/")
     void autoSignWithVerification(AutoSignWithVerification aswv);
 
     /**
@@ -155,7 +135,6 @@ public interface ContractApi {
      *
      * @param contractId p
      */
-    @Post("/storage/contract/lock/")
     void lockContract(ContractId contractId);
 
     /**
@@ -163,13 +142,11 @@ public interface ContractApi {
      *
      * @param pc p
      */
-    @Post("/contract/getPreviewURL/")
     String previewContract(PreviewContract pc);
 
     /**
      * unified notification call back handler.
      * 自行实现。
      */
-    @Deprecated
     void unifiedNotifyHandler(NotifyResult notifyResult, String sign, String rtick);
 }

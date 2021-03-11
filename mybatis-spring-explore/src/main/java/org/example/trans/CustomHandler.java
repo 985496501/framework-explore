@@ -1,7 +1,7 @@
 package org.example.trans;
 
 import cc.jinyun.contract.external.AbstractSignContract;
-import cc.jinyun.contract.external.UserDetail;
+import cc.jinyun.contract.external.user.UserDetail;
 import org.springframework.stereotype.Service;
 
 /**

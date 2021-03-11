@@ -1,4 +1,4 @@
-package cc.jinyun.contract.pojo.reponse;
+package cc.jinyun.contract.pojo.callback;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class NotifyResult {
+public class BestSignNotifyResult<T> {
     private String action;
-    private SignContractCallBack params;
+    private T params;
 }

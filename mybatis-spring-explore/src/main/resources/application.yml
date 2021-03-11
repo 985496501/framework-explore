@@ -15,11 +15,21 @@ demo:
   method: a
 
 
-app:
+bestsign:
   developer:
     develop-id: 1613804644012480439
     private-key: MIICdgIBADANBgkqhkiG9w0BAQEFAASCAmAwggJcAgEAAoGBAJJ6epovD4anigkHzFEQazk7QDIO4qW//L65hEc9XdJMLDgFdA5C68u22Xr2Y2VAyoRNapXOk/Ja2zOm17eJ7pXOyOJUo0RxhvUBuJqv3juDBV0RSdYCBHDeYWWJ/t2IdH8uOwHEnBtJ52nsQ5LR4dS8z2mHDc8Knydd1sFaGC3VAgMBAAECgYBILlDSP9SPz2mnD4+wdr3PwxHcWRd5BEWhGrxDessMAXtc09sf1/xoM5+yB05tq+LgFWIrllOzfvA74MC2ciL+MA+Rt2ZUwXSPhPUppYPVWI++/O8BZ2SzJOQ3rZsraWv/IVjU2WwfLEoevSM89N+rTdKcs3dfpY/o10A5UQwuVQJBAOUKNgS3L5UgLVihQXT+Cs3MM1qBexwQnuMtNFftgWLxAcTUWwYwUulvtU02qnELxcrl4WdKZ6TFtHLikiUDl4cCQQCjuGWQjM56v0jDIDCxum1w3FusCKXN9PEM1JrUxu0NzxOfy7viB2xTfSi3i3fe3IJtrQuPTW01c31XJd2pMq7DAkEAv+oYbUcZhbkahgNIl8EuSFbsSM/p2hBLMkv0aiDGo6MSOl09kCf5sUQ7BGHj2ylkKKkKf8QmqDhJBWK31m/2DQJAFsFpdHbtuAfgQCa4PeuwjHBEWZv2F7NE0ci3IH3psvKmQp6ZpafseYo635AGADbb9gyIP8m+NSCxOiysK3k86wJADhzue6IH5mTq/Via14inulwiUD/awqKLw79IKmAL06YaomQo9SsMd9WXcZIPYJawLDV6TVk5vcdsD38mqqBG6w==
     server-host: https://openapi.bestsign.info/openapi/v2
     push-url: http://3qw3em.natappfree.cc/callback
+    company-account: 18380294241
+    company-name: 四川世纪兆通物流有限公司
+    contract-template-list:
+      - index: 0
+        tid: 161500019701000001
+        title: 货主年签合同
+      - index: 1
+        tid: 161500019701000001
+        title: 司机年签合同
+
 
 # 配置 arthas

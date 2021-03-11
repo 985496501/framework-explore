@@ -1,32 +1,50 @@
 {
   "groups": [
     {
-      "name": "app.developer",
+      "name": "bestsign.developer",
       "type": "cc.jinyun.contract.config.AppProperties",
       "sourceType": "cc.jinyun.contract.config.AppProperties"
     }
   ],
   "properties": [
     {
-      "name": "app.developer.develop-id",
+      "name": "bestsign.developer.company-account",
+      "type": "java.lang.String",
+      "description": "公司账户",
+      "sourceType": "cc.jinyun.contract.config.AppProperties"
+    },
+    {
+      "name": "bestsign.developer.company-name",
+      "type": "java.lang.String",
+      "description": "公司名称",
+      "sourceType": "cc.jinyun.contract.config.AppProperties"
+    },
+    {
+      "name": "bestsign.developer.contract-template-list",
+      "type": "java.util.List<cc.jinyun.contract.config.ContractTemplate>",
+      "description": "合同列表 0：货主版 1：司机版",
+      "sourceType": "cc.jinyun.contract.config.AppProperties"
+    },
+    {
+      "name": "bestsign.developer.develop-id",
       "type": "java.lang.String",
       "description": "开发id",
       "sourceType": "cc.jinyun.contract.config.AppProperties"
     },
     {
-      "name": "app.developer.private-key",
+      "name": "bestsign.developer.private-key",
       "type": "java.lang.String",
       "description": "密钥",
       "sourceType": "cc.jinyun.contract.config.AppProperties"
     },
     {
-      "name": "app.developer.push-url",
+      "name": "bestsign.developer.push-url",
       "type": "java.lang.String",
       "description": "合同签署的回调地址",
       "sourceType": "cc.jinyun.contract.config.AppProperties"
     },
     {
-      "name": "app.developer.server-host",
+      "name": "bestsign.developer.server-host",
       "type": "java.lang.String",
       "description": "请求主机域名",
       "sourceType": "cc.jinyun.contract.config.AppProperties"

@@ -2,7 +2,11 @@ package cc.jinyun.contract.external;
 
 
 import cc.jinyun.contract.config.AppProperties;
+import cc.jinyun.contract.config.ContractTemplate;
+import cc.jinyun.contract.external.user.UserDetail;
+import cc.jinyun.contract.external.user.UserDetailService;
 import cc.jinyun.contract.internal.ContractApi;
+import cc.jinyun.contract.pojo.other.ExposedContractAttr;
 import cc.jinyun.contract.pojo.request.*;
 import lombok.extern.slf4j.Slf4j;
 
@@ -10,14 +14,11 @@ import javax.annotation.Resource;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
+/**
+ * How to support multiple kinds of contract?
+ */
 @Slf4j
 public abstract class AbstractSignContract implements UserDetailService {
-    public static final String COMPANY_ACCOUNT = "18380294241";
-    public static final String COMPANY_NAME = " 四川世纪兆通物流有限公司";
-    public static final String CONTRACT_FILE_NAME = "年签合同";
-    public static final String CONTRACT_TEMPLATE_ID = "161500019701000001";
-    public static final String PUSH_URL = "http://3qw3em.natappfree.cc/callback";
-
     @Resource
     protected ContractApi bestSignApi;
     @Resource
@@ -28,15 +29,24 @@ public abstract class AbstractSignContract implements UserDetailService {
 
     public abstract boolean hasRegistered(Long userId);
 
-    public String signContract(Long userId) {
+    /**
+     * Dedicated to sign annual contract of the given user
+     *
+     * @param userId        the given id of user
+     * @param contractIndex the index of contractList configured
+     * @return the short url of contract
+     */
+    public final ExposedContractAttr signAnnualContract(Long userId, Integer contractIndex) {
         UserDetail userDetail = getUserDetail(userId);
         if (!hasRegistered(userId)) {
             this.preparePersonalMaterial(userDetail);
         }
 
-        String contractId = this.obtainContractId(userDetail.getUserName());
-        this.automaticallySignByTemplateVals(contractId);
-        return this.manuallySignByTemplateVals(contractId, userDetail.getPhoneNumber());
+        ContractTemplate contractTemplate = appProperties.getContractTemplateList().get(contractIndex);
+        String contractId = this.obtainContractId(userDetail.getUserName(), contractTemplate.getTid(), contractTemplate.getTitle());
+        this.automaticallySignByTemplateVals(contractId, contractTemplate.getTid());
+        String contractUrl = this.manuallySignByTemplateVals(contractId, userDetail.getPhoneNumber(), contractTemplate.getTid());
+        return ExposedContractAttr.newInstance(contractId, contractUrl);
     }
 
     private void preparePersonalMaterial(UserDetail userDetail) {
@@ -53,46 +63,47 @@ public abstract class AbstractSignContract implements UserDetailService {
         bestSignApi.createPersonalSignature(new CreateSignature(userDetail.getPhoneNumber()));
     }
 
-    private String obtainContractId(String userName) {
+    private String obtainContractId(String userName, String tid, String title) {
         log.info("generating contract file by template...");
         String localDate = LocalDate.now().format(DateTimeFormatter.ISO_DATE);
         CreateContractPdf createContractPdf = CreateContractPdf.builder()
-                .account(COMPANY_ACCOUNT)
-                .tid(CONTRACT_TEMPLATE_ID)
-                .templateValues(new CreateContractPdf.TemplateValue(userName, localDate, COMPANY_NAME, localDate))
+                .account(appProperties.getCompanyAccount())
+                .tid(tid)
+                .templateValues(new CreateContractPdf.TemplateValue(userName, localDate,
+                        appProperties.getCompanyName(), localDate))
                 .build();
         String token = bestSignApi.generateContractFileByTemplate(createContractPdf);
 
         CreateContractByFile createContractByFile = new CreateContractByFile();
-        createContractByFile.setAccount(COMPANY_ACCOUNT);
-        createContractByFile.setTitle(CONTRACT_FILE_NAME);
-        createContractByFile.setTid(CONTRACT_TEMPLATE_ID);
+        createContractByFile.setAccount(appProperties.getCompanyAccount());
+        createContractByFile.setTitle(title);
+        createContractByFile.setTid(tid);
         createContractByFile.setTemplateToken(token);
         return bestSignApi.createContractByFile(createContractByFile);
     }
 
-    private void automaticallySignByTemplateVals(String contractId) {
+    private void automaticallySignByTemplateVals(String contractId, String tid) {
         AutomaticallySignByTemplateVal templateVal = new AutomaticallySignByTemplateVal();
         templateVal.setContractId(contractId);
-        templateVal.setTid(CONTRACT_TEMPLATE_ID);
+        templateVal.setTid(tid);
 
-        AutomaticallySignByTemplateVal.Vals vals = new AutomaticallySignByTemplateVal.Vals(new AutomaticallySignByTemplateVal.Val(COMPANY_ACCOUNT),
-                new AutomaticallySignByTemplateVal.Val(COMPANY_ACCOUNT), new AutomaticallySignByTemplateVal.Val(COMPANY_ACCOUNT));
+        AutomaticallySignByTemplateVal.Vals vals = new AutomaticallySignByTemplateVal.Vals(
+                new AutomaticallySignByTemplateVal.Val(appProperties.getCompanyAccount()),
+                new AutomaticallySignByTemplateVal.Val(appProperties.getCompanyAccount()),
+                new AutomaticallySignByTemplateVal.Val(appProperties.getCompanyAccount()));
         templateVal.setVars(vals);
         bestSignApi.automaticallySignByTemplateVals(templateVal);
     }
 
-    private String manuallySignByTemplateVals(String contractId, String phoneNumber) {
+    private String manuallySignByTemplateVals(String contractId, String phoneNumber, String tid) {
         ManuallySignByTemplateVal templateVal = new ManuallySignByTemplateVal();
         templateVal.setContractId(contractId);
 
-        String pushUrl = appProperties.getPushUrl();
-        templateVal.setPushUrl(pushUrl == null ? PUSH_URL : pushUrl);
+        templateVal.setPushUrl(appProperties.getPushUrl());
         templateVal.setSigner(phoneNumber);
-        templateVal.setTid(CONTRACT_TEMPLATE_ID);
+        templateVal.setTid(tid);
         templateVal.setIsDrawSignatureImage("0");
         templateVal.setVarNames("user,userName,userDate");
         return bestSignApi.manuallySignByTemplateVals(templateVal);
     }
-
 }

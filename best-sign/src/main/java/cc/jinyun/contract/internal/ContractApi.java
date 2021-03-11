@@ -1,6 +1,6 @@
 package cc.jinyun.contract.internal;
 
-import cc.jinyun.contract.pojo.reponse.NotifyResult;
+import cc.jinyun.contract.pojo.callback.BestSignNotifyResult;
 import cc.jinyun.contract.pojo.request.*;
 
 public interface ContractApi {
@@ -148,5 +148,5 @@ public interface ContractApi {
      * unified notification call back handler.
      * 自行实现。
      */
-    void unifiedNotifyHandler(NotifyResult notifyResult, String sign, String rtick);
+    void unifiedNotifyHandler(BestSignNotifyResult bestSignNotifyResult, String sign, String rtick);
 }

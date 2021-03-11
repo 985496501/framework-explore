@@ -1,7 +1,8 @@
 package org.example;
 
+import cc.jinyun.contract.pojo.other.ExposedContractAttr;
+import cc.jinyun.contract.pojo.callback.BestSignNotifyResult;
 import cn.hutool.json.JSONUtil;
-import cc.jinyun.contract.pojo.reponse.NotifyResult;
 import org.example.trans.CustomHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -59,8 +60,8 @@ public class EntryApplication {
     CustomHandler customHandler;
 
     @GetMapping("url")
-    public String getUrl() {
-        return customHandler.signContract(1L);
+    public ExposedContractAttr getUrl() {
+        return customHandler.signAnnualContract(1L, 0);
     }
 
     /**
@@ -72,13 +73,13 @@ public class EntryApplication {
      *     "action": "signCatalogContract"
      * }
      *
-     * @param notifyResult
+     * @param bestSignNotifyResult
      * @param httpServletRequest
      */
     @PostMapping("callback")
-    public void callback(@RequestBody NotifyResult notifyResult, HttpServletRequest httpServletRequest) {
+    public void callback(@RequestBody BestSignNotifyResult bestSignNotifyResult, HttpServletRequest httpServletRequest) {
         System.out.println(httpServletRequest.getHeader("rtick"));
         System.out.println(httpServletRequest.getHeader("sign"));
-        System.out.println(JSONUtil.toJsonPrettyStr(notifyResult));
+        System.out.println(JSONUtil.toJsonPrettyStr(bestSignNotifyResult));
     }
 }

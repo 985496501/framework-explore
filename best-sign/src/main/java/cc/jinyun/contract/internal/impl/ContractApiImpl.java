@@ -3,6 +3,7 @@ package cc.jinyun.contract.internal.impl;
 import cc.jinyun.contract.client.HttpClient;
 import cc.jinyun.contract.constant.MethodEnum;
 import cc.jinyun.contract.internal.ContractApi;
+import cc.jinyun.contract.pojo.callback.BestSignNotifyResult;
 import cc.jinyun.contract.pojo.reponse.*;
 import cc.jinyun.contract.pojo.request.*;
 
@@ -124,7 +125,7 @@ public class ContractApiImpl implements ContractApi {
     }
 
     @Override
-    public void unifiedNotifyHandler(NotifyResult result, String sign, String rtick) {
+    public void unifiedNotifyHandler(BestSignNotifyResult result, String sign, String rtick) {
         // todo: 签名校验 先不做
         // SpringContextFacade.getBean(ContractActionCallback.class).callback(result.getParams());
     }

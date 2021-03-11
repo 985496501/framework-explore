@@ -2,7 +2,6 @@ package cc.jinyun.contract.client;
 
 import cc.jinyun.contract.constant.MethodEnum;
 import cc.jinyun.contract.util.RSAUtils;
-import cn.hutool.http.ContentType;
 import cn.hutool.http.HttpResponse;
 import cn.hutool.http.HttpStatus;
 import cn.hutool.http.HttpUtil;
@@ -43,7 +42,7 @@ public class HttpClient {
 
         String path = String.format(URL_SIGN_PARAM, developerId, rtick, sign);
         String url = serverHost + methodEnum.getMethod() + path;
-        HttpResponse httpResponse = HttpUtil.createPost(url).body(jsonStr, ContentType.JSON.getValue()).execute();
+        HttpResponse httpResponse = HttpUtil.createPost(url).body(jsonStr, "application/json").execute();
         String body = httpResponse.body();
         if (httpResponse.getStatus() != HttpStatus.HTTP_OK) {
             log.error(body);

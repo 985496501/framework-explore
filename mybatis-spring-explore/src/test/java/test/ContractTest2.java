@@ -1,6 +1,11 @@
 package test;
 
+import cc.jinyun.contract.external.BestSignService;
+import cc.jinyun.contract.internal.ContractApi;
+import cc.jinyun.contract.pojo.other.CharPosition;
+import cc.jinyun.contract.pojo.other.PdfPageContentPositions;
 import cc.jinyun.contract.pojo.request.*;
+import cc.jinyun.contract.util.PdfUtils;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.io.FastByteArrayOutputStream;
 import cn.hutool.core.io.FileUtil;
@@ -8,10 +13,6 @@ import cn.hutool.core.io.IoUtil;
 import cn.hutool.json.JSONUtil;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.example.EntryApplication;
-import cc.jinyun.contract.internal.ContractApi;
-import cc.jinyun.contract.pojo.other.CharPosition;
-import cc.jinyun.contract.pojo.other.PdfPageContentPositions;
-import cc.jinyun.contract.util.PdfUtils;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,7 +22,9 @@ import javax.annotation.Resource;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 
 @RunWith(SpringRunner.class)
@@ -198,13 +201,16 @@ public class ContractTest2 {
         contractPdf.setAccount("18380294241");
         contractPdf.setTid("161500019701000001");
 
-        CreateContractPdf.TemplateValue templateValue = new CreateContractPdf.TemplateValue();
-        templateValue.setUserName("刘津运");
-        templateValue.setCompanyName("轻链科技有限公司");
-
-        templateValue.setUserDate("2021-3-9");
-        templateValue.setUserDate("2021-3-9");
-        contractPdf.setTemplateValues(templateValue);
+        Map<String, String> map = new HashMap<>();
+        map.put("userName", "刘津运");
+        map.put("companyName", "轻链科技有限公司");
+//        CreateContractPdf.TemplateValue templateValue = new CreateContractPdf.TemplateValue();
+//        templateValue.setUserName("刘津运");
+//        templateValue.setCompanyName("轻链科技有限公司");
+//
+//        templateValue.setUserDate("2021-3-9");
+//        templateValue.setUserDate("2021-3-9");
+        contractPdf.setTemplateValues(map);
 
         String token = bestSignApi.generateContractFileByTemplate(contractPdf);
         System.out.println(token);
@@ -267,7 +273,15 @@ public class ContractTest2 {
         System.out.println(s);
     }
 
+    // -----------------------------------------------------------------------------------------------------
+    @Resource
+    private BestSignService bestSignService;
 
+    @Test
+    public void topTest() {
+//        ExposedContractAttr exposedContractAttr = bestSignService.signAnnualContract(1L, "");
+//        System.out.println(exposedContractAttr);
+    }
 
 
 

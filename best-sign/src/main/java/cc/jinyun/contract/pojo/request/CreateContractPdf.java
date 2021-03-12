@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Map;
+
 @Data
 @Builder
 @NoArgsConstructor
@@ -14,17 +16,10 @@ public class CreateContractPdf {
 
     private String tid;
 
-    private TemplateValue templateValues;
-
-    @Data
-    @Builder
-    @AllArgsConstructor
-    @NoArgsConstructor
-    public static class TemplateValue {
-        private String userName;
-        private String userDate;
-
-        private String companyName;
-        private String companyDate;
-    }
+    /**
+     * template value
+     * 1. userName userDate companyName companyDate
+     * 2. populate the placeholder with the given value that matches the specified key.
+     */
+    private Map<String, String> templateValues;
 }

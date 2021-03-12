@@ -23,13 +23,23 @@ bestsign:
     push-url: http://3qw3em.natappfree.cc/callback
     company-account: 18380294241
     company-name: 四川世纪兆通物流有限公司
-    contract-template-list:
-      - index: 0
-        tid: 161500019701000001
-        title: 货主年签合同
-      - index: 1
-        tid: 161500019701000001
-        title: 司机年签合同
+
 
 
 # 配置 arthas
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

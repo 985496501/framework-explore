@@ -1,12 +1,10 @@
 package org.example.thread.executor;
 
 import cn.hutool.core.thread.NamedThreadFactory;
+import org.example.thread.util.Sleeper;
 import org.junit.Test;
 
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.ThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.util.concurrent.*;
 
 /**
  * 最基础的线程池的有关代码
@@ -21,15 +19,48 @@ import java.util.concurrent.TimeUnit;
  */
 public class PoolTest {
 
-    @Test
-    public void executorTest() throws InterruptedException {
-        ThreadPoolExecutor threadPoolExecutor =
-                new ThreadPoolExecutor(1, 1, 0L, TimeUnit.MILLISECONDS,
-                        new ArrayBlockingQueue<>(100), new NamedThreadFactory("test", false));
-        threadPoolExecutor.submit(CodingTask.TASK);
 
-        TimeUnit.SECONDS.sleep(1);
+    /**
+     * todo: 后面继续探索线程池的实现细节，以及设计思想
+     *
+     * @throws InterruptedException
+     * @throws ExecutionException
+     */
+    @Test
+    public void executorTest() throws InterruptedException, ExecutionException {
+        ThreadPoolExecutor threadPoolExecutor =
+                new ThreadPoolExecutor(4, 10, 0L, TimeUnit.MILLISECONDS,
+                        new ArrayBlockingQueue<>(1024), new NamedThreadFactory("async-test", false));
+
+
+        Future<String> future = threadPoolExecutor.submit(new Callable<String>() {
+            @Override
+            public String call() throws Exception {
+                Sleeper.sleep(10);
+                return "hello world";
+            }
+        });
+
+        String s = future.get();
+        System.out.println(s);
+
+        TimeUnit.SECONDS.sleep(5);
     }
+
+
+    @Test
+    public void retryTest() {
+
+    }
+
+
+
+
+
+
+
+
+
 
     static class CodingTask implements Runnable {
         static final CodingTask TASK = new CodingTask();

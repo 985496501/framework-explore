@@ -20,12 +20,6 @@
       "sourceType": "cc.jinyun.contract.config.AppProperties"
     },
     {
-      "name": "bestsign.developer.contract-template-list",
-      "type": "java.util.List<cc.jinyun.contract.config.ContractTemplate>",
-      "description": "合同列表 0：货主版 1：司机版",
-      "sourceType": "cc.jinyun.contract.config.AppProperties"
-    },
-    {
       "name": "bestsign.developer.develop-id",
       "type": "java.lang.String",
       "description": "开发id",

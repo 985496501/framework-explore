@@ -1,8 +1,8 @@
 package org.example;
 
-import cc.jinyun.contract.pojo.other.ExposedContractAttr;
 import cc.jinyun.contract.pojo.callback.BestSignNotifyResult;
 import cn.hutool.json.JSONUtil;
+import org.example.common.pojo.Chat;
 import org.example.trans.CustomHandler;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -23,7 +23,7 @@ import java.util.concurrent.locks.LockSupport;
  * @author: jinyun
  * @date: 2021/2/8
  */
-
+//https://www.cnblogs.com/xuwenjin/p/13141132.html
 @EnableWebSocket
 @RestController
 @SpringBootApplication
@@ -56,13 +56,13 @@ public class EntryApplication {
         return "second thread";
     }
 
+    @PostMapping("postTest")
+    public String postTest(@RequestBody Chat chat) {
+        return JSONUtil.toJsonPrettyStr(chat);
+    }
+
     @Resource
     CustomHandler customHandler;
-
-    @GetMapping("url")
-    public ExposedContractAttr getUrl() {
-        return customHandler.signAnnualContract(1L, 0);
-    }
 
     /**
      * {

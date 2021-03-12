@@ -3,8 +3,6 @@ package cc.jinyun.contract.config;
 import lombok.Data;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-import java.util.List;
-
 
 @Data
 @ConfigurationProperties("bestsign.developer")
@@ -33,10 +31,4 @@ public class AppProperties {
      * 公司名称
      */
     private String companyName;
-    /**
-     * 合同列表
-     * 0：货主版
-     * 1：司机版
-     */
-    private List<ContractTemplate> contractTemplateList;
 }

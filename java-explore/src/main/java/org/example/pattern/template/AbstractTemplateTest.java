@@ -11,6 +11,8 @@ import org.junit.Test;
  * 就是定义顶级接口 以及抽象接口供子类实现, 子类只要实现就能完成装配, 后面看到 RestTemplate 这个也使用了 模板方法。
  * 看到类图和设计才发现 原来真的就是这样。
  *
+ * <b>公共封装 与 相应的业务系统进行api的渗透 可以使用这种方法, SpringSecurity</b>
+ *
  * @author: jinyun
  * @date: 2021/3/12
  */

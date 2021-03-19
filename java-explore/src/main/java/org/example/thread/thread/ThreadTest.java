@@ -91,4 +91,44 @@ public class ThreadTest {
             System.out.println("hello waiter");
         }
     }
+
+    /**
+     * 多线程编程 要时刻处理线程中断
+     * 中断请求是非常必须的 在整个操作系统任务调度中都发挥着重要的作用
+     * 目前理解： 就是这个线程中断, 引起了这个线程的注意, 可能是继续执行, 也可能是用于关闭这个线程的资源
+     * 具体怎么操作应该由线程来完成。
+     *
+     */
+    @Test
+    public void interruptTest() {
+        // 当前线程被中断了吗？
+        // 这个是调用的是线程的静态方式 但是这个调用完毕之后会自动清空中断的状态
+        boolean interrupted = Thread.interrupted();
+        System.out.println(interrupted);
+    }
+
+
+    @Test
+    public void interrupt2Test() {
+        Thread t = new Thread(() -> {
+            System.out.println("执行任务");
+            // 这个仅仅调用实例方法判断是否中断
+            Thread thread = Thread.currentThread();
+            thread.interrupt();
+            boolean interrupted = thread.isInterrupted();
+            System.out.println("threadName: " + thread.getName() + " ‘s 实例中断状态： " + interrupted);
+
+            boolean staticInterrupted = Thread.interrupted();
+            System.out.println("threadName: " + thread.getName() + " ‘s 静态中断状态： " + staticInterrupted);
+
+            // 一旦调用了静态的判断中断方法就要进行 进行判断如果这个线程被中断了 还要继续把中断继续往外抛
+            if (staticInterrupted) {
+                thread.interrupt();
+            }
+        });
+
+        t.start();
+
+
+    }
 }

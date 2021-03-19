@@ -19,6 +19,9 @@
         <module>best-sign</module>
         <module>okhttp-explore</module>
         <module>pojo-common</module>
+        <module>cloud-common</module>
+        <module>cloud-service-discovery</module>
+        <module>cloud-application</module>
     </modules>
 
     <properties>

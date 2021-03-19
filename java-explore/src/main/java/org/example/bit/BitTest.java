@@ -1,5 +1,7 @@
 package org.example.bit;
 
+import org.junit.Test;
+
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
@@ -52,9 +54,9 @@ public class BitTest {
     // runState is stored in the high-order bits
 
     /**
-     * 1000 0000 0000 0000 0000 0000 0000 0001
+     * 原码: 1000 0000 0000 0000 0000 0000 0000 0001
      * RUNNING:
-     * 1000 0000 0000 0000 0000 0000 0000 0000
+     * 反码：1000 0000 0000 0000 0000 0000 0000 0000
      *
      *
      *
@@ -65,13 +67,81 @@ public class BitTest {
     private static final int TIDYING    =  2 << COUNT_BITS;
     private static final int TERMINATED =  3 << COUNT_BITS;
 
-    // Packing and unpacking ctl
+
+    /**
+     * Packing and unpacking ctl
+     * @param c
+     * @return
+     */
     private static int runStateOf(int c)     { return c & ~CAPACITY; }
     private static int workerCountOf(int c)  { return c & CAPACITY; }
     private static int ctlOf(int rs, int wc) { return rs | wc; }
 
-    public static void main(String[] args) {
-        System.out.println(RUNNING);
+
+    @Test
+    public void printBinaryTest() {
+        // 11101 29 + 2 = 31  2^5-1
+        System.out.println("COUNT_BITS: " + Integer.toBinaryString(COUNT_BITS));
+        System.out.println("COUNT_BITS: (int) " + COUNT_BITS + "\n");
+
+        // -1 << 29 : 1110 0000 0000 0000 0000 0000 0000 0000
+        // 原码：1000 0000 0000 0000 0000 0000 0000 0001
+        // 反码：1111 1111 1111 1111 1111 1111 1111 1110
+        // 补码：1111 1111 1111 1111 1111 1111 1111 1111  <-- 29位
+        // 标识：1110 0000 0000 0000 0000 0000 0000 0000
+        // 实际上是把 低三位 --> 高三位
+        System.out.println("RUNNING: -1 << COUNT_BITS " + Integer.toBinaryString(RUNNING));
+        System.out.println("RUNNING: (int) " + RUNNING + "\n");
+
+        // (1 << 29) - 1 : 0000 1111 1111 1111 1111 1111 11111 1111,     2^29-1
+        System.out.println("CAPACITY: (1 << COUNT_BITS) - 1 " + Integer.toBinaryString(CAPACITY));
+        System.out.println("RUNNING: (int) " + CAPACITY + "\n");
+
+        // 000
+        System.out.println("SHUTDOWN: 0 << COUNT_BITS " + Integer.toBinaryString(SHUTDOWN));
+        System.out.println("SHUTDOWN: (int) " + SHUTDOWN + "\n");
+
+        // 001  1
+        System.out.println("STOP: 1 << COUNT_BITS " + Integer.toBinaryString(STOP));
+        System.out.println("STOP: (int) " + STOP + "\n");
+
+        // 010  2  TIDYING
+        // 011  3  TERMINATED
+        // ctlOf(RUNNING, 0)
+        // 1110 0000 0000 0000 0000 0000 0000 0000
+        // 0000 0000 0000 0000 0000 0000 0000 0000
+        // 1110 0000 0000 0000 0000 0000 0000 0000
+        System.out.println("ctl: RUNNING | 0 " + Integer.toBinaryString(ctl.get()));
+        System.out.println("ctl: (int) " + ctl.get() + "\n");
+        System.out.println(ctl.get());
+    }
+
+
+    @Test
+    public void threadWrapperWorkerTest() {
+        retry:
+        for (;;) {
+            int c = ctl.get();
+            int rs = runStateOf(c);
+
+            for (;;) {
+                int wc = workerCountOf(c);
+                if (ctl.compareAndSet(c, c + 1))
+                    break retry;
+                c = ctl.get();  // Re-read ctl
+                if (runStateOf(c) != rs)
+                    continue retry;
+                // else CAS failed due to workerCount change; retry inner loop
+            }
+        }
+    }
+
+    /**
+     * precious word: spinning:
+     */
+    @Test
+    public void loopTest() {
+
     }
 }
 

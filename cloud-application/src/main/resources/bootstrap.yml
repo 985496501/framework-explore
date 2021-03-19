@@ -1,0 +1,11 @@
+server:
+  port: ${SERVER_PORT:8443}
+
+spring:
+  profiles:
+    active: dev
+  application:
+    name: cloud-application
+  cloud:
+    nacos:
+      server-addr: ${REGISTER_HOST:localhost}:${REGISTER_PORT:8848}

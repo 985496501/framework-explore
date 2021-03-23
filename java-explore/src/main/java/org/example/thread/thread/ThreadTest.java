@@ -110,6 +110,10 @@ public class ThreadTest {
 
     @Test
     public void interrupt2Test() {
+        new Thread(()-> {
+
+        }).start();
+
         Thread t = new Thread(() -> {
             System.out.println("执行任务");
             // 这个仅仅调用实例方法判断是否中断
@@ -128,7 +132,5 @@ public class ThreadTest {
         });
 
         t.start();
-
-
     }
 }

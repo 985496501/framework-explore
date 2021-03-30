@@ -1,0 +1,11 @@
+spring:
+  application:
+    name: provider
+
+  cloud:
+    nacos:
+      config:
+        file-extension: yaml
+
+server:
+  port: 3303

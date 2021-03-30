@@ -30,11 +30,7 @@ public class ThreadPoolExecutorTest {
     public static final int MAX_TASK_SIZE = 1024;
 
 
-    /**
-     * 底层使用这个 inbounded DelayedWorkQueue.
-     */
-    ScheduledThreadPoolExecutor scheduledPoolExecutor =
-            new ScheduledThreadPoolExecutor(2, new NamedThreadFactory("scheduled-async", false));
+
 
     /**
      * todo: 后面继续探索线程池的实现细节，以及设计思想
@@ -57,16 +53,6 @@ public class ThreadPoolExecutorTest {
 
         TimeUnit.SECONDS.sleep(100);
     }
-
-    /**
-     * 调度的线程池
-     */
-    @Test
-    public void scheduledPoolExecutorTest() {
-        scheduledPoolExecutor.prestartAllCoreThreads();
-//        scheduledPoolExecutor.scheduleWithFixedDelay()
-    }
-
 
 
 

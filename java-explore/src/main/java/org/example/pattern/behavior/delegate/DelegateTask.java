@@ -1,4 +1,4 @@
-package org.example.pattern.delegate;
+package org.example.pattern.behavior.delegate;
 
 import java.util.LinkedList;
 import java.util.List;

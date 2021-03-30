@@ -1,4 +1,4 @@
-package org.example.pattern.delegate;
+package org.example.pattern.behavior.delegate;
 
 /**
  * 定义的一个顶级行为接口

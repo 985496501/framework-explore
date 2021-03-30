@@ -1,4 +1,4 @@
-package org.example.pattern.singleton;
+package org.example.pattern.creator.singleton;
 
 /**
  * singleton pattern.
@@ -32,6 +32,9 @@ public class SingletonTest {
         HungrySingleton.sayHello();
     }
 
+    /**
+     * 懒汉式的单例模式 使用DCL 双重检验锁 进行实现。
+     */
     public static class LazySingleton {
         // 如果多线程环境下, 第一个线程可以创建对象, 其他对象获取对象
         // 如果 创建对象发生了指令重排, 获取了一个半初始化实例对象, 会发生数据不一致

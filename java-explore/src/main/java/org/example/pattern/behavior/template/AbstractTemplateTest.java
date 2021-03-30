@@ -1,4 +1,4 @@
-package org.example.pattern.template;
+package org.example.pattern.behavior.template;
 
 import org.junit.Test;
 

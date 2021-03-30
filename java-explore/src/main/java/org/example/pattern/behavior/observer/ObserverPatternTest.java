@@ -1,4 +1,4 @@
-package org.example.pattern.observer;
+package org.example.pattern.behavior.observer;
 
 import org.junit.Test;
 

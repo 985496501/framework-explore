@@ -1,4 +1,4 @@
-package org.example.pattern.adapter;
+package org.example.pattern.structure.adapter;
 
 import org.junit.Test;
 

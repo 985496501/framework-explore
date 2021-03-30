@@ -1,4 +1,4 @@
-package org.example.pattern.builder;
+package org.example.pattern.creator.builder;
 
 import lombok.ToString;
 import org.junit.Test;
@@ -13,22 +13,24 @@ import org.junit.Test;
  * <p>
  * <p>
  * Plain ordinary java object builder.
+ * 在一些业务中 尝试使用这个构建对象。
+ *
+ * 这个创建对象的模式在框架中常常用到 可以自己写自己创建对象建造者 builder
  *
  * @author: Liu Jinyun
  * @date: 2021/2/17/0:22
  */
 @ToString
-public class Pojo {
+public class PojoTest {
     @Test
     public void buildObj() {
 
-        Pojo pojo = Pojo.builder()
+        PojoTest pojoTest = PojoTest.builder()
                 .name("builder")
                 .length(15)
                 .build();
-        System.out.println(pojo);
+        System.out.println(pojoTest);
     }
-
 
     // 一般使用构建者模式 属性都是大于或者等于4个 这里仅仅是模拟
 
@@ -43,12 +45,12 @@ public class Pojo {
      *
      * @param pojoBuilder builder
      */
-    private Pojo(PojoBuilder pojoBuilder) {
+    private PojoTest(PojoBuilder pojoBuilder) {
         this.name = pojoBuilder.name;
         this.length = pojoBuilder.length;
     }
 
-    public Pojo() {}
+    public PojoTest() {}
 
     // 一般是通过一个静态内部类构造对象
     /**
@@ -96,8 +98,8 @@ public class Pojo {
          *
          * @return pojo
          */
-        public Pojo build() {
-            return new Pojo(this);
+        public PojoTest build() {
+            return new PojoTest(this);
         }
     }
 }

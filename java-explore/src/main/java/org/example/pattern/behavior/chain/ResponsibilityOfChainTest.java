@@ -1,4 +1,4 @@
-package org.example.pattern.chain;
+package org.example.pattern.behavior.chain;
 
 /**
  * responsibility of chain: 铁索连环

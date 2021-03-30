@@ -1,4 +1,4 @@
-package org.example.pattern.delegate;
+package org.example.pattern.behavior.delegate;
 
 /**
  * @author: jinyun

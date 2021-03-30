@@ -1,4 +1,4 @@
-package org.example.pattern.facade;
+package org.example.pattern.structure.facede;
 
 /**
  * facade pattern: 门面设计模式

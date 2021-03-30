@@ -1,4 +1,4 @@
-package org.example.pattern.strategy;
+package org.example.pattern.behavior.strategy;
 
 import java.util.HashMap;
 import java.util.Map;

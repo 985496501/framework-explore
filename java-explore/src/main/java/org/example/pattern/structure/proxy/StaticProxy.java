@@ -1,4 +1,4 @@
-package org.example.pattern.proxy;
+package org.example.pattern.structure.proxy;
 
 /**
  * 静态代理 一般不会用扩展性不高

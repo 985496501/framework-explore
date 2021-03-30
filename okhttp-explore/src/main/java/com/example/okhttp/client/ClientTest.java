@@ -1,9 +1,7 @@
 package com.example.okhttp.client;
 
-import cn.hutool.json.JSONUtil;
 import com.example.okhttp.interceptor.SimpleInterceptor;
 import okhttp3.*;
-import org.example.common.pojo.Chat;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -48,7 +46,7 @@ public class ClientTest {
     @Test
     public void postTest() {
 
-        RequestBody requestBody = RequestBody.create(JSON, JSONUtil.toJsonStr(new Chat("hello world, i'm an okHttp client")));
+        RequestBody requestBody = RequestBody.create(JSON, "{}");
         Request request = new Request.Builder().url("http://localhost:7777/postTest").post(requestBody).build();
         try (Response response = customizedOkHttpClient.newCall(request).execute()) {
             System.out.println(response.body().string());

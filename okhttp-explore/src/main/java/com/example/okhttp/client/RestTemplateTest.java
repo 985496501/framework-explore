@@ -1,7 +1,6 @@
 package com.example.okhttp.client;
 
 import okhttp3.OkHttpClient;
-import org.example.common.pojo.Chat;
 import org.junit.Test;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +46,7 @@ public class RestTemplateTest {
     @Test
     public void postTest() {
         ResponseEntity<String> stringResponseEntity = REST_TEMPLATE.postForEntity("http://localhost:7777/postTest",
-                new Chat("hello world, i'm an okHttp client"), String.class);
+                new Object(), String.class);
         HttpHeaders headers = stringResponseEntity.getHeaders();
         headers.forEach((header, headerVals) -> {
             System.out.println(header + ":" + headerVals);

@@ -1,8 +1,11 @@
 package org.example.loadbalanced;
 
+import org.junit.Test;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * 负载均衡算法
@@ -15,6 +18,26 @@ import java.util.Map;
  */
 public class RoundRobinTest {
     // 首先我们需要定义的数据的存储结构
+
+    private AtomicInteger i = new AtomicInteger(-1);
+
+    public int get() {
+        return Math.abs(i.incrementAndGet()) % 4;
+    }
+
+    /**
+     * loadBalancer 就是根据服务的列表, 然后一直随机取, 想这个底层直接使用数组实现即可。
+     */
+    @Test
+    public void testTest() {
+        for (int i1 = 0; i1 < 10; i1++) {
+            System.out.println(get());
+        }
+    }
+
+
+
+
 
 
     /**

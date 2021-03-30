@@ -2,10 +2,13 @@ package org.example;
 
 import cc.jinyun.contract.pojo.callback.BestSignNotifyResult;
 import cn.hutool.json.JSONUtil;
-import org.example.common.pojo.Chat;
 import org.example.trans.CustomHandler;
+import org.junit.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.scheduling.annotation.EnableAsync;
+import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -27,6 +30,8 @@ import java.util.concurrent.locks.LockSupport;
 @EnableWebSocket
 @RestController
 @SpringBootApplication
+@EnableAsync
+@EnableScheduling
 public class EntryApplication {
     public static void main(String[] args) {
         // false
@@ -56,11 +61,6 @@ public class EntryApplication {
         return "second thread";
     }
 
-    @PostMapping("postTest")
-    public String postTest(@RequestBody Chat chat) {
-        return JSONUtil.toJsonPrettyStr(chat);
-    }
-
     @Resource
     CustomHandler customHandler;
 
@@ -81,5 +81,12 @@ public class EntryApplication {
         System.out.println(httpServletRequest.getHeader("rtick"));
         System.out.println(httpServletRequest.getHeader("sign"));
         System.out.println(JSONUtil.toJsonPrettyStr(bestSignNotifyResult));
+    }
+
+    @Test
+    public void scanTest() {
+        AnnotationMetadata annotationMetadata = AnnotationMetadata.introspect(EntryApplication.class);
+        annotationMetadata.getAnnotationTypes().forEach(System.out::println);
+        System.out.println(annotationMetadata.hasAnnotation("org.springframework.boot.autoconfigure.SpringBootApplication"));
     }
 }

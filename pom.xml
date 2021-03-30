@@ -18,10 +18,8 @@
         <module>starter-explore</module>
         <module>best-sign</module>
         <module>okhttp-explore</module>
-        <module>pojo-common</module>
-        <module>cloud-common</module>
-        <module>cloud-service-discovery</module>
-        <module>cloud-application</module>
+        <!--使用idea remove module del file, 需要手动删除pom里的-->
+        <module>spring-cloud-explore</module>
     </modules>
 
     <properties>

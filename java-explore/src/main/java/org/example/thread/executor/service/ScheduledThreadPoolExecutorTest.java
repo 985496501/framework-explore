@@ -1,20 +1,17 @@
 package org.example.thread.executor.service;
 
+import org.example.thread.util.Sleeper;
 import org.junit.Test;
 
-import java.util.concurrent.DelayQueue;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.ThreadPoolExecutor;
+import java.util.concurrent.*;
 
 /**
  * 看下这个线程执行器
  * 它的类图 继承了 ThreadPoolExecutor 实现了 ScheduledExecutorService.
  * see {@link ThreadPoolExecutor} and {@link ScheduledExecutorService},  since JDK1.5
  * ThreadPoolExecutor: 这个具体的探究看 {@link ThreadPoolExecutorTest}
- *
+ * <p>
  * ScheduledExecutorService: after a given delay, or to execute periodically.
- *
  *
  * @author: jinyun
  * @date: 2021/3/30
@@ -33,11 +30,10 @@ public class ScheduledThreadPoolExecutorTest {
      *     <li>DelayedWorkQueue()</li>
      *     <li>AbortPolicy() 直接使程序异常终止</li>
      * </ul>
-     *
+     * <p>
      * 我们知道只有队列满了才会开始 辅助线程完成操作。
-     * see {@link ScheduledThreadPoolExecutor.DelayedWorkQueue}
+     * see {@code ScheduledThreadPoolExecutor.DelayedWorkQueue}
      * compare to {@link DelayQueue}
-     *
      */
     public static final ScheduledThreadPoolExecutor scheduledPoolExecutor =
             new ScheduledThreadPoolExecutor(1, r -> {
@@ -51,6 +47,13 @@ public class ScheduledThreadPoolExecutorTest {
 
     @Test
     public void scheduledThreadPoolExecutorTest() {
+        // 看下这个延迟的实现
+        scheduledPoolExecutor.scheduleWithFixedDelay(() -> {
+            Sleeper.sleep(2);
+            System.out.println("我是scheduledThreadPoolExecutor... 2秒一触发调用");
+            System.out.println("进行逻辑业务处理");
+        }, 0, 2, TimeUnit.SECONDS);
 
+        Sleeper.sleep(20);
     }
 }

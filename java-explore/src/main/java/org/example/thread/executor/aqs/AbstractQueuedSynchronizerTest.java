@@ -3,7 +3,9 @@ package org.example.thread.executor.aqs;
 import org.example.thread.util.Sleeper;
 import org.junit.Test;
 
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.locks.AbstractQueuedSynchronizer;
 import java.util.concurrent.locks.LockSupport;
 
 /**
@@ -56,6 +58,11 @@ import java.util.concurrent.locks.LockSupport;
  *     </li>
  * </ol>
  *
+ *
+ * <h2>基于AQS实现的并发同步器</h2>
+ * <ul>
+ *     <li>{@link CountDownLatch}</li>
+ * </ul>
  * @author: jinyun
  * @date: 2021/3/19
  */
@@ -65,6 +72,11 @@ public class AbstractQueuedSynchronizerTest implements QueueOperation, ExportedM
 
     /**
      * private Node enq(final Node node): 保证并发原子的入队操作, 懒加载进行头部初始化。
+     *
+     * 1. 没有头节点 代表就是这个队列还没有初始化, 会创建一个node作为 Head 然后把 指定的 Node 入队插入到队列中.
+     * 2. 所有的操作都是 自旋, 保证并发的原子性
+     *
+     * {@link AbstractQueuedSynchronizer#enq(java.util.concurrent.locks.AbstractQueuedSynchronizer.Node)}
      */
     @Test
     @Override
@@ -77,16 +89,19 @@ public class AbstractQueuedSynchronizerTest implements QueueOperation, ExportedM
         // 6. node.prev = t(tail) 这个就是直接把传入的这个节点的前驱直接指向tail的地址, 然后tail和node自旋设置;
         // 7. 永远都是返回最新的尾结点的前驱节点;
 
-        // 1. 如果没有并发就只有当前这个一个线程封装的node0,
-        // 只有一种情况： head = node0, tail = node0, node0<->node0<->node0, 返回一个node0.
+        // 1. 如果没有并发就只有当前这个一个线程封装的node0 = new Node(), node提供了一个空参的构造方法就是用来初始化头节点的.
+        // {head = node0, tail = head} 初始化CLH队列, node.prev = tail, 把传入的节点以spinning的方式插入到队尾, 返回一个node's predecessor.
         // 2. 如果出现并发就会出现抢占head, 抢占tail,
-        // 2.1> head=node0, tail=node0 然后出现了线程1抢占了执行权, 线程0等待OS调度
-        // 2.2> node0<->node1, head=node0, tail=node1,  线程1返回 node0
+        // 2.1> head=node, tail=node 然后出现了线程1抢占了执行权, 线程0等待OS调度
+        // 2.2> node<->node1, head=node, tail=node1,  线程1返回 node
         // 2.3> 线程0重新执行, node0<->node1<->node0, 线程0返货 node1
     }
 
     /**
      * private Node addWaiter(Node mode): 简便方法, 使用 排他/共享 模式把当前线程封装成Node 入队。
+     *
+     * 封装Node, 在初始化队列的时候使用 new Node()
+     * 正常的添加Node, 需要 两个必要的参数  new Node(thread, mode)
      */
     @Test
     @Override
@@ -112,12 +127,13 @@ public class AbstractQueuedSynchronizerTest implements QueueOperation, ExportedM
     /**
      * private void unparkSuccessor(Node node): 唤醒这个节点的后继节点, 如果后继节点存在
      * 独占锁唤醒 这个队列的后继节点
+     * {@link AbstractQueuedSynchronizer#unparkSuccessor(java.util.concurrent.locks.AbstractQueuedSynchronizer.Node)}
      */
     @Test
     @Override
     public void unparkSuccessorTest() {
         // 1. 获取node.waitStatus < 0 代表的状态 Signal, condition, propagate这三种状态
-        // 2. 把当前节点的waitStatus 原子操作置为0
+        // 2. 把当前节点的waitStatus 原子操作置为 0
         // 3. 开始唤醒这个节点的后继节点了
         // 3.1> 获取这个节点的后继节点 successor;
         // 3.2> node->successor0->node->tail 如果后继节点null或者cancelled的, 就从这个队列的tail往前面找一个node s
@@ -134,20 +150,25 @@ public class AbstractQueuedSynchronizerTest implements QueueOperation, ExportedM
     public void doReleaseSharedTest() {
         // 1. 这个释放工作, 需要保证头存在 并且不能和tail相同(因为要唤醒head节点的下一节点), 整个释放工作, 队列的头不能发生变化
         // 2. head的 waitStatus == Signal(-1), 然后使用原子操作 把 waitStatus 设置成 0
-        // 使用就会重新获取最新的头 执行同样的操作, head's waitStatus = signal, 把状态置为0 唤醒head的后继节点
+        // 使用就会重新获取最新的头 执行同样的操作, head's waitStatus = signal, 把状态置为0 唤醒head的后继节点 unparkSuccessor(h);
         // 3. 如果waitStatus=0 并且 成功把头部节点设置 Propagate(-3) 然后走下面判断头 完成操作。
     }
 
     /**
      * private void setHeadAndPropagate(Node node, int propagate): 设置头节点和传播状态
-     * 设置队列的头节点, 并且检查后继节点是否处于共享模式的等待
+     * <p>设置队列的头节点, 并且检查后继节点是否处于共享模式的等待</p>
      * 如果要么 propagate > 0 要么 propagate 状态被设置了。
      */
     @Test
     @Override
     public void setHeadAndPropagateTest() {
-        // 1. 先使用了局部变量记录下原来的head, 把这个节点设置成头节点
-        // 2. todo: 其他地方为啥调用 就是 waitStatus 这4个状态的实际业务意义
+        // 1. 先使用了局部变量记录下原来的h = head, 把这个节点(doAcquireShared()方法要求这个Node是head->Node)设置成头节点
+        // 2. 直接把当前Node设置成头节点, 头节点仅仅保留waitStatus, next, 其他的thread, prev直接置为null.
+        // 3. 检查：  propagate > 0; h == null; h.waitStatus < 0; 检查原来的头
+        // 然后再检查一下 新的头, h == null; h.waitStatus < 0
+        // 只要有一个满足, 检查一下头节点的下一个节点, 是不是null, 或者 isShared()
+        // 具体看执行 doReleaseShared(); 主要就是保证头部不变 且 头部节点有后继节点 的情况下自旋,
+        // 检查头部的标记位, 是不是signal, 如果是就尝试把头==0; 只要把头部改成之后, 就会调用 unparkSuccessor(h);
     }
 
 
@@ -197,6 +218,12 @@ public class AbstractQueuedSynchronizerTest implements QueueOperation, ExportedM
         // 2. 找前驱节点, 把找到了一个没有cancelled的node的后继节点指向 当前节点
         // 3. 如果前驱节点的 状态是0 -3, 把前驱节点的 状态设置为signal, 但是不会立即park当前节点的线程
         // 4. 调用方应该重试来确认 它不能获取 在 parking 之前。
+
+        // 先创建的head 就是 pred, waitStatus = 0, 第一次调用这个方法返回false, 然后会把头状态改成 signal=-1,
+        // 在 其他 acquire 方法中被调用
+        // 比如 doAcquireShared(int arg) 中,  acquire这个方法是新的线程来了要操作共享资源了 二话不说直接先入队
+        // 第一次这个head 调用这个 方法返回false, 标识不用park, 然后再 自旋, 这时候头部已经被改成signal直接返回了true
+        // 这个方法配合 parkAndCheckInterrupt()方法使用, 直接把当前的阻塞对象同步的set到Thread中, 同时直接park掉.
     }
 
 
@@ -237,6 +264,19 @@ public class AbstractQueuedSynchronizerTest implements QueueOperation, ExportedM
 
     }
 
+    /**
+     * 共享模式尝试 获取
+     * {@link java.util.concurrent.locks.AbstractQueuedSynchronizer#doAcquireShared(int)}
+     */
+    @Test
+    @Override
+    public void doAcquireSharedTest() {
+        // 另一种情况： 非常重要的方法
+        // 如果当前线程绑定的节点的  前驱节点 是 头节点, 必须是, 也就是当前线程是队列中的第二节点
+        // 才会再次检查 r = tryAcquire() 这个方法我们通过state自定义, 只有>=0 说明 你允许它 获取共享资源的执行权了
+        // 首先 setHeadAndPropagate(node, r):  你允许这个线程(第二个节点的线程)获取执行权了, 共享模式下的, setHeadAndPropagate()
+
+    }
 
     // exported method. Should implemented by subclass (private inner help class)
 

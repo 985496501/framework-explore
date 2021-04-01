@@ -15,45 +15,48 @@ import java.util.concurrent.atomic.AtomicInteger;
  * <p>
  * BlockingQueue:
  *
+ *
+ * <h2>RejectedPolicy</h2>
+ * <ul>
+ *     <li>AbortPolicy 直接抛异常</li>
+ *     <li>DiscardPolicy 直接丢弃 不报异常</li>
+ *     <li>DiscardOldestPolicy 直接丢弃队列 出队让出一个位置</li>
+ *     <li>CallerPolicy 让主线程执行</li>
+ * </ul>
+ *
+ *
  * @author: Liu Jinyun
  * @date: 2021/2/10/20:17
  */
 public class ThreadPoolExecutorTest {
 
+
+    private static final int corePoolSize = 4;
+    private static final int maximumPoolSize = 10;
+    private static final ArrayBlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(1024);
+
     /**
      * default rejected handler execution: AbortPolicy, throws exception.
      */
-    ThreadPoolExecutor threadPoolExecutor =
-            new ThreadPoolExecutor(4, 10, 0L, TimeUnit.MILLISECONDS,
-                    new ArrayBlockingQueue<>(1024), new NamedThreadFactory("async-test", false));
+    public static final ThreadPoolExecutor threadPoolExecutor =
+            new ThreadPoolExecutor(corePoolSize, maximumPoolSize, 0L, TimeUnit.MILLISECONDS,
+                    workQueue, new NamedThreadFactory("async-test", false));
 
     public static final int MAX_TASK_SIZE = 1024;
 
+    public static final Runnable r = () -> {
+        System.out.println("我就是一个简单的模拟的任务, 大约执行1s");
+        Sleeper.sleep(1);
+    };
 
 
+    public static void main(String[] args) {
+        // 线程执行完之后 就会被挂起来 wait 就不会占用CPU的资源空旋
+        // 这个是主动调用执行任务, 线程池如果接受不了就存入内部维护的任务队列里面
+        threadPoolExecutor.execute(r);
 
-    /**
-     * todo: 后面继续探索线程池的实现细节，以及设计思想
-     *
-     * @throws InterruptedException
-     * @throws ExecutionException
-     */
-    @Test
-    public void threadPoolExecutorTest() throws InterruptedException {
-        for (int i = 0; i < 1034; i++) {
-            Future<String> future = threadPoolExecutor.submit(new Callable<String>() {
-                @Override
-                public String call() throws Exception {
-                    Sleeper.sleep(20);
-                    return "hello world";
-                }
-            });
-        }
-
-
-        TimeUnit.SECONDS.sleep(100);
+        // 不会主动退出, 主要手动销毁线程池
     }
-
 
 
     @Test
@@ -96,17 +99,4 @@ public class ThreadPoolExecutorTest {
         BlockingQueue<DelayedTask> blockingQueue = new DelayQueue<>();
     }
 
-    /**
-     * Object
-     */
-    @Test
-    public void jsonTest() {
-//        JSONUtil.toJsonPrettyStr()
-    }
-
-
-    @Test
-    public void bitCompute() {
-
-    }
 }

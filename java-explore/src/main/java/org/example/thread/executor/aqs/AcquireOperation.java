@@ -14,4 +14,6 @@ public interface AcquireOperation {
     void doAcquireInterruptiblyTest();
 
     void doAcquireNanosTest();
+
+    void doAcquireSharedTest();
 }

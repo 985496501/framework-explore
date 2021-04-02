@@ -2,7 +2,6 @@ package org.example.model.thread.executor.service;
 
 import cn.hutool.core.thread.NamedThreadFactory;
 import org.example.model.thread.executor.queue.DelayedTask;
-import org.example.model.thread.util.Sleeper;
 import org.junit.Test;
 
 import java.util.concurrent.*;
@@ -31,8 +30,8 @@ import java.util.concurrent.atomic.AtomicInteger;
 public class ThreadPoolExecutorTest {
 
 
-    private static final int corePoolSize = 4;
-    private static final int maximumPoolSize = 10;
+    private static final int corePoolSize = 10000;
+    private static final int maximumPoolSize = 20000;
     private static final ArrayBlockingQueue<Runnable> workQueue = new ArrayBlockingQueue<>(1024);
 
     /**
@@ -45,16 +44,24 @@ public class ThreadPoolExecutorTest {
     public static final int MAX_TASK_SIZE = 1024;
 
     public static final Runnable r = () -> {
-        System.out.println("我就是一个简单的模拟的任务, 大约执行1s");
-        Sleeper.sleep(1);
+        while (true) {
+            long i = 0;
+            i ++;
+            ++ i;
+            ++ i;
+             System.out.println("我就是一个简单的模拟的任务, 大约执行1s" + (++i));
+        }
+//        Sleeper.sleep(1);
     };
 
 
     public static void main(String[] args) {
         // 线程执行完之后 就会被挂起来 wait 就不会占用CPU的资源空旋
         // 这个是主动调用执行任务, 线程池如果接受不了就存入内部维护的任务队列里面
-        threadPoolExecutor.execute(r);
-
+        for (int i = 0; i < 100; i++) {
+            // exhausted cpu
+            threadPoolExecutor.submit(r);
+        }
         // 不会主动退出, 主要手动销毁线程池
     }
 
@@ -98,5 +105,6 @@ public class ThreadPoolExecutorTest {
 //        Delayed delayed = new DelayedTask();
         BlockingQueue<DelayedTask> blockingQueue = new DelayQueue<>();
     }
+
 
 }

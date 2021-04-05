@@ -1,11 +1,26 @@
-server:
-  port: 9999
+server: # ServerProperties 配置ServletWebServer
+  max-http-header-size: 8KB
+  port: 8080  # server http port
+  compression:
+    enabled: true # default false
+  ssl:
+    enabled: true # default true
+  undertow: # embedded server thread model
+    threads:
+      io: 1
+      worker: 4
+  shutdown: graceful # default immediate, graceful 处理完所有的请求才会关闭线程池
+
 
 spring:
   application:
     name: mybatis-spring-explore
+  mvc: # spring.mvc.* 相关的配置配置 DispatcherServlet
+    servlet:
+      path: /
+    log-request-details: true # default false
 
-# 数据源的自动配置
+  # 数据源的自动配置
   datasource:
     type: com.zaxxer.hikari.HikariDataSource
     driver-class-name: com.mysql.cj.jdbc.Driver

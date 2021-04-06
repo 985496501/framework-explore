@@ -1,8 +1,6 @@
 package org.example.websocket.config;
 
 import org.example.websocket.handler.EnhancedTextWebSocketHandler;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry;
 
@@ -10,8 +8,8 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
  * @author: jinyun
  * @date: 2021/2/23
  */
-@Configuration
-@EnableWebSocket
+//@Configuration
+//@EnableWebSocket
 public class WebsocketConfig implements WebSocketConfigurer {
     final EnhancedTextWebSocketHandler socketSessionHandler;
 

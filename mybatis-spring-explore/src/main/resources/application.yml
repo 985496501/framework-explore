@@ -14,11 +14,7 @@ server: # ServerProperties 配置ServletWebServer
 
 spring:
   application:
-    name: mybatis-spring-explore
-  mvc: # spring.mvc.* 相关的配置配置 DispatcherServlet
-    servlet:
-      path: /
-    log-request-details: true # default false
+    name: im
 
   # 数据源的自动配置
   datasource:

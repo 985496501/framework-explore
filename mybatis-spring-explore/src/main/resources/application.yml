@@ -1,9 +1,13 @@
 server:
   port: 9999
+  undertow:
+    threads:
+      worker: 4
+      io: 1
 
 spring:
   application:
-    name: mybatis-spring-explore
+    name: im
 
 # 数据源的自动配置
   datasource:

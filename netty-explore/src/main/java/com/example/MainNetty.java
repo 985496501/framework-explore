@@ -1,5 +1,8 @@
 package com.example;
 
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.nio.NioEventLoopGroup;
+
 /**
  * 继续探索netty
  * netty分包 以及各个 层级的设计
@@ -27,6 +30,11 @@ package com.example;
  */
 public class MainNetty {
     public static void main(String[] args) {
+        NioEventLoopGroup bossGroup = new NioEventLoopGroup(1);
+        NioEventLoopGroup workerGroup = new NioEventLoopGroup(4);
+        ServerBootstrap bootstrap = new ServerBootstrap();
+        bootstrap.group(bossGroup, workerGroup);
+
 
     }
 }

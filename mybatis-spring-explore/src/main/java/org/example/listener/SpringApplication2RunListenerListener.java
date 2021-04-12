@@ -1,5 +1,6 @@
 package org.example.listener;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
@@ -10,44 +11,48 @@ import org.springframework.core.env.ConfigurableEnvironment;
  * @author: jinyun
  * @date: 2021/3/3
  */
-public class CustomListener implements SpringApplicationRunListener {
+@Slf4j
+public class SpringApplication2RunListenerListener implements SpringApplicationRunListener {
+    private final SpringApplication application;
+    private final String[] args;
 
-    public CustomListener(SpringApplication application, String[] args) {
-        System.out.println("我这里可以配置一下SpringApplication application 吧");
+    public SpringApplication2RunListenerListener(SpringApplication application, String[] args) {
+        this.application = application;
+        this.args = args;
     }
 
     @Override
     public void starting(ConfigurableBootstrapContext bootstrapContext) {
-        System.out.println("starting(ConfigurableBootstrapContext bootstrapContext)");
+        log.info("starting(ConfigurableBootstrapContext bootstrapContext)");
     }
 
     @Override
     public void environmentPrepared(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
-        System.out.println("environmentPrepared(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) ");
+        log.info("environmentPrepared(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) ");
     }
 
     @Override
     public void contextPrepared(ConfigurableApplicationContext context) {
-        System.out.println("contextPrepared(ConfigurableApplicationContext context) ");
+        log.info("contextPrepared(ConfigurableApplicationContext context) ");
     }
 
     @Override
     public void contextLoaded(ConfigurableApplicationContext context) {
-        System.out.println("contextLoaded(ConfigurableApplicationContext context)  ");
+        log.info("contextLoaded(ConfigurableApplicationContext context)  ");
     }
 
     @Override
     public void started(ConfigurableApplicationContext context) {
-        System.out.println("started(ConfigurableApplicationContext context)");
+        log.info("started(ConfigurableApplicationContext context)");
     }
 
     @Override
     public void running(ConfigurableApplicationContext context) {
-        System.out.println("running(ConfigurableApplicationContext context) ");
+        log.info("running(ConfigurableApplicationContext context) ");
     }
 
     @Override
     public void failed(ConfigurableApplicationContext context, Throwable exception) {
-        System.out.println("failed(ConfigurableApplicationContext context, Throwable exception) ");
+        log.info("failed(ConfigurableApplicationContext context, Throwable exception) ");
     }
 }

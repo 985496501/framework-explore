@@ -15,7 +15,6 @@
         <module>netty-explore</module>
         <module>algorithm-explore</module>
         <module>middleware-explore</module>
-        <module>starter-explore</module>
         <module>best-sign</module>
         <module>okhttp-explore</module>
         <!--使用idea remove module del file, 需要手动删除pom里的-->

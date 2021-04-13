@@ -3,6 +3,7 @@ package org.example.beans.bean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.*;
 import org.springframework.context.*;
+import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
@@ -39,8 +40,9 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date: 2021/3/16
  */
 //@Component
-public class SimpleBean implements InitializingBean, DisposableBean,
+public class SimpleBean implements Ordered, InitializingBean, DisposableBean,
         ApplicationContextAware, BeanNameAware, BeanClassLoaderAware, BeanFactoryAware, EnvironmentAware, ResourceLoaderAware {
+
     private final AtomicInteger i = new AtomicInteger(1);
 
     /**
@@ -124,5 +126,11 @@ public class SimpleBean implements InitializingBean, DisposableBean,
     public void setResourceLoader(ResourceLoader resourceLoader) {
         System.out.println("ResourceLoaderAware==" + resourceLoader + i.incrementAndGet());
         this.resourceLoader = resourceLoader;
+    }
+
+    @Override
+    public int getOrder() {
+        System.out.println("Ordered==" + resourceLoader + i.incrementAndGet());
+        return Ordered.LOWEST_PRECEDENCE;
     }
 }

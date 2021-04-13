@@ -9,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Profile;
+import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
 
@@ -23,7 +24,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Slf4j
 @Profile("dev")
 @Component
-public class DefaultBeanLifecycle implements SmartInitializingSingleton, InitializingBean, DisposableBean,
+public class DefaultBeanLifecycle implements Ordered, SmartInitializingSingleton, InitializingBean, DisposableBean,
         ApplicationContextAware, EnvironmentAware, CommandLineRunner {
 
     private final AtomicInteger order = new AtomicInteger(0);
@@ -68,5 +69,12 @@ public class DefaultBeanLifecycle implements SmartInitializingSingleton, Initial
     public void run(String... args) {
         // 整个应用创建成功之后 发布这个事件
         log.error("====> 回调的方法: {}, 次序: {}", "CommandLineRunner", order.incrementAndGet());
+    }
+
+    @Override
+    public int getOrder() {
+        // bean的实例化的顺序
+        log.error("====> 回调的方法: {}, 次序: {}", "CommandLineRunner", order.incrementAndGet());
+        return Ordered.LOWEST_PRECEDENCE;
     }
 }

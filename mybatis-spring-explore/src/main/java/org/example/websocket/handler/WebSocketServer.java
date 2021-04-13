@@ -52,6 +52,5 @@ public class WebSocketServer extends TextWebSocketHandler {
     @Override
     public void afterConnectionClosed(WebSocketSession session, CloseStatus status) {
         log.info("someone disconnected websocket server...");
-        SocketSessionHandler.getInstance().removeSession(session);
     }
 }

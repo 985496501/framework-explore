@@ -14,6 +14,10 @@
 
     <modules>
         <module>cloud-application-provider</module>
+        <module>spring-cloud-gateway</module>
+        <module>cloud-application-consumer</module>
+        <module>cloud-application-common</module>
+        <module>cloud-application-middleware</module>
     </modules>
 
     <properties>
@@ -27,10 +31,21 @@
         <spring-boot.version>2.3.7.RELEASE</spring-boot.version>
         <spring-cloud-alibaba.version>2.2.2.RELEASE</spring-cloud-alibaba.version>
         <spring-cloud.version>Hoxton.SR9</spring-cloud.version>
+
+        <!--模块版本控制-->
+        <cloud-application-common.version>1.0-SNAPSHOT</cloud-application-common.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
+            <dependency>
+                <groupId>org.example</groupId>
+                <artifactId>cloud-application-common</artifactId>
+                <version>${cloud-application-common.version}</version>
+            </dependency>
+
+
+
             <dependency>
                 <groupId>org.springframework.cloud</groupId>
                 <artifactId>spring-cloud-dependencies</artifactId>

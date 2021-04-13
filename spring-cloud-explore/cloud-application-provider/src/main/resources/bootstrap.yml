@@ -6,6 +6,9 @@ spring:
     nacos:
       config:
         file-extension: yaml
+      discovery:
+        heart-beat-interval: 60
+
 
 server:
   port: 3303

@@ -11,6 +11,7 @@
 
     <artifactId>spring-boot-explore</artifactId>
     <packaging>pom</packaging>
+
     <modules>
         <module>netty-explore</module>
         <module>mybatis-spring-explore</module>

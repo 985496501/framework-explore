@@ -9,16 +9,12 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>mybatis-explore</module>
         <module>java-explore</module>
-        <module>mybatis-spring-explore</module>
-        <module>netty-explore</module>
         <module>algorithm-explore</module>
         <module>middleware-explore</module>
-        <module>best-sign</module>
-        <module>okhttp-explore</module>
         <!--使用idea remove module del file, 需要手动删除pom里的-->
         <module>spring-cloud-explore</module>
+        <module>spring-boot-explore</module>
     </modules>
 
     <properties>

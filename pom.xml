@@ -12,7 +12,6 @@
         <module>java-explore</module>
         <module>algorithm-explore</module>
         <module>middleware-explore</module>
-        <!--使用idea remove module del file, 需要手动删除pom里的-->
         <module>spring-cloud-explore</module>
         <module>spring-boot-explore</module>
     </modules>
@@ -22,34 +21,4 @@
         <maven.compiler.target>8</maven.compiler.target>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.projectlombok</groupId>
-                <artifactId>lombok</artifactId>
-                <version>1.18.12</version>
-            </dependency>
-
-            <dependency>
-                <groupId>junit</groupId>
-                <artifactId>junit</artifactId>
-                <version>4.12</version>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
-    <dependencies>
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <!--只在编译和测试阶段有效, 不会被打包到运行环境-->
-<!--            <scope>test</scope>-->
-        </dependency>
-    </dependencies>
 </project>

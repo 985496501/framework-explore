@@ -9,34 +9,24 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>mybatis-spring-explore</artifactId>
+    <artifactId>spring-boot</artifactId>
     <packaging>jar</packaging>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
         <mysql-jdbc-driver.version>8.0.22</mysql-jdbc-driver.version>
-        <spring-boot.version>2.4.0</spring-boot.version>
+
         <mybatis.version>2.1.4</mybatis.version>
         <hutool.version>5.5.8</hutool.version>
     </properties>
 
-    <dependencyManagement>
-        <dependencies>
-            <!--直接使用springboot的统一版本控制-->
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>${spring-boot.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-            <!--这里可直接依赖 springcloud 的版本控制-->
-            <!--这里可直接依赖 springcloudAlibaba 的版本控制-->
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
@@ -90,6 +80,7 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-configuration-processor</artifactId>
+            <optional>true</optional>
         </dependency>
 
         <dependency>
@@ -97,7 +88,6 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>${mybatis.version}</version>
         </dependency>
-
 
         <dependency>
             <groupId>mysql</groupId>
@@ -143,6 +133,17 @@
 <!--            <artifactId>xxl-job-core</artifactId>-->
 <!--            <version></version>-->
 <!--        </dependency>-->
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -151,6 +152,15 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.4.0</version>
+                <configuration>
+                    <excludes>
+                        <!--打包屏蔽这个扫描 提醒-->
+                        <exclude>
+                            <groupId>org.springframework.boot</groupId>
+                            <artifactId>spring-boot-configuration-processor</artifactId>
+                        </exclude>
+                    </excludes>
+                </configuration>
             </plugin>
         </plugins>
     </build>

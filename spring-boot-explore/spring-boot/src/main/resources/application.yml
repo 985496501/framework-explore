@@ -1,0 +1,43 @@
+server: # ServerProperties 配置ServletWebServer
+  max-http-header-size: 8KB
+  port: 8080  # server http port
+  compression:
+    enabled: true # default false
+  ssl:
+    enabled: true # default true
+  undertow: # embedded server thread model
+    threads:
+      io: 1
+      worker: 4
+  shutdown: graceful # default immediate, graceful 处理完所有的请求才会关闭线程池
+
+
+spring:
+  application:
+    name: im
+
+  #security的配置
+  security:
+    user:
+      name: admin
+      password: 123456
+
+  # 数据源的自动配置
+  datasource:
+    type: com.zaxxer.hikari.HikariDataSource
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://localhost:3306/dev-local?useSSL=false&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&transformedBitIsBoolean=true&tinyInt1isBit=false&allowMultiQueries=true&serverTimezone=GMT%2B8
+    name: root
+    password:
+
+
+
+
+
+
+
+
+
+
+
+

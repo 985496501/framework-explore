@@ -14,13 +14,28 @@
 
     <modules>
         <module>netty-explore</module>
-        <module>mybatis-spring-explore</module>
+        <module>spring-boot</module>
         <module>mybatis-explore</module>
+        <module>spring-security</module>
     </modules>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
         <maven.compiler.target>8</maven.compiler.target>
+
+        <spring-boot.version>2.4.0</spring-boot.version>
     </properties>
 
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-dependencies</artifactId>
+                <version>${spring-boot.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
 </project>

@@ -5,9 +5,7 @@ import org.springframework.beans.factory.DisposableBean;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.EnvironmentAware;
+import org.springframework.context.*;
 import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
@@ -25,7 +23,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 @Profile("dev")
 @Component
 public class DefaultBeanLifecycle implements Ordered, SmartInitializingSingleton, InitializingBean, DisposableBean,
-        ApplicationContextAware, EnvironmentAware, CommandLineRunner {
+        ApplicationContextAware, EnvironmentAware, CommandLineRunner, ApplicationEventPublisherAware {
 
     private final AtomicInteger order = new AtomicInteger(0);
 
@@ -38,6 +36,12 @@ public class DefaultBeanLifecycle implements Ordered, SmartInitializingSingleton
     public void setEnvironment(Environment environment) {
         // 实例化完这个对象之后就回调这个环境
         log.error("====> 回调的方法: {}, 次序: {}", "EnvironmentAware", order.incrementAndGet());
+    }
+
+    @Override
+    public void setApplicationEventPublisher(ApplicationEventPublisher applicationEventPublisher) {
+        // 注入ApplicationEventPublisher
+        log.error("====> 回调的方法: {}, 次序: {}", "ApplicationEventPublisherAware", order.incrementAndGet());
     }
 
     @Override
@@ -77,4 +81,6 @@ public class DefaultBeanLifecycle implements Ordered, SmartInitializingSingleton
         log.error("====> 回调的方法: {}, 次序: {}", "CommandLineRunner", order.incrementAndGet());
         return Ordered.LOWEST_PRECEDENCE;
     }
+
+
 }

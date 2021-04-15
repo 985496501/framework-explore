@@ -12,7 +12,7 @@
         <module>java-explore</module>
         <module>algorithm-explore</module>
         <module>middleware-explore</module>
-        <module>spring-cloud-explore</module>
+        <module>spring-cloud</module>
         <module>spring-boot-explore</module>
     </modules>
 

@@ -9,11 +9,11 @@
     <packaging>pom</packaging>
     <version>1.0-SNAPSHOT</version>
     <modules>
-        <module>java-explore</module>
-        <module>algorithm-explore</module>
-        <module>middleware-explore</module>
+        <module>java</module>
+        <module>algorithm</module>
+        <module>middleware</module>
         <module>spring-cloud</module>
-        <module>spring-boot-explore</module>
+        <module>spring-boot-2</module>
     </modules>
 
     <properties>

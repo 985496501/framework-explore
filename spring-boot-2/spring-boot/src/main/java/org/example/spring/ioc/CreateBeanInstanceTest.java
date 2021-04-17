@@ -1,6 +1,7 @@
 package org.example.spring.ioc;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * 这里看下 spring 创建对象的一个方法

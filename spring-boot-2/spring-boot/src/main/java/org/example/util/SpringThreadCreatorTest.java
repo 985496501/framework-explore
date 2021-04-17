@@ -1,7 +1,7 @@
 package org.example.util;
 
 import lombok.Getter;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.util.CustomizableThreadCreator;
 
 /**

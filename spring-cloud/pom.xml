@@ -18,6 +18,7 @@
         <module>cloud-application-consumer</module>
         <module>cloud-application-common</module>
         <module>cloud-application-middleware</module>
+        <module>cloud-application</module>
     </modules>
 
     <properties>

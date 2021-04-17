@@ -1,6 +1,7 @@
 package org.example.spring.listener;
 
-import org.junit.Test;
+
+import org.junit.jupiter.api.Test;
 
 /**
  * spring application 的创建, 具体的几个阶段, 每个阶段需要另外做的事情

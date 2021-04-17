@@ -1,8 +1,8 @@
 package org.example.config;
 
 import org.example.beans.bean.ImportMyBean;
+import org.junit.jupiter.api.Test;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.testng.annotations.Test;
 
 /**
  * 探索一下 @Configuration;

@@ -1,6 +1,6 @@
 package org.example.spring.loader;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 import org.springframework.core.io.support.SpringFactoriesLoader;
 import org.springframework.util.ConcurrentReferenceHashMap;
 

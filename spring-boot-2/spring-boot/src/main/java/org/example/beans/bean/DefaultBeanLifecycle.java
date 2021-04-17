@@ -6,7 +6,6 @@ import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.*;
-import org.springframework.context.annotation.Profile;
 import org.springframework.core.Ordered;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
@@ -20,7 +19,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @date: 2021/4/12
  */
 @Slf4j
-@Profile("dev")
+//@Profile("dev")
 @Component
 public class DefaultBeanLifecycle implements Ordered, SmartInitializingSingleton, InitializingBean, DisposableBean,
         ApplicationContextAware, EnvironmentAware, CommandLineRunner, ApplicationEventPublisherAware {

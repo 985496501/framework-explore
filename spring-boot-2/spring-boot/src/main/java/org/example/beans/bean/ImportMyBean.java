@@ -13,6 +13,19 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.core.type.AnnotationMetadata;
 
 /**
+ * Spring 定义了一个接口, Import bean定义的注册员
+ * 显然, 这个接口的作用 就是 bean 定义相关的, 它负责把 Import(BeanClass) 这个bean定义 写入到 beanDefinitionRegistry中吧.
+ * 在bean定义层面, 这个是最优的选择。
+ * 并且Spring 建议在bean定义层面, 使用4个回调方法, 或者提供这个4个类型的构造方法, [optional]
+ *
+ * 这个接口主要看一个方法：
+ * registerBeanDefinitions(AnnotationMetadata, BeanDefinitionRegistry)
+ * AnnotationMetadata: 注解元数据 ？
+ * BeanDefinitonRegistry: bean定义中心
+ *
+ * 这个方法和@Configuration相关。
+ * 还有一个类需要注意就是  BeanDefinitionRegistryPostProcessor.
+ *
  * @author: jinyun
  * @date: 2021/3/26
  */

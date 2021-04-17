@@ -1,4 +1,4 @@
-package org.example.thread.future;
+package org.example.model.thread.future;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

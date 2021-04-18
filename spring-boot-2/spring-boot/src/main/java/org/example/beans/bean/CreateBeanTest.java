@@ -1,5 +1,6 @@
 package org.example.beans.bean;
 
+import org.example.beans.bean.register.DefaultBeanLifecycle;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.ListableBeanFactory;

@@ -1,4 +1,4 @@
-package org.example.beans.bean;
+package org.example.beans.bean.scan;
 
 /**
  * 基于classpath类扫描的方式 创建 BeanDefinition.

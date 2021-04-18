@@ -1,4 +1,4 @@
-package org.example.beans.bean;
+package org.example.beans.bean.register;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.DisposableBean;

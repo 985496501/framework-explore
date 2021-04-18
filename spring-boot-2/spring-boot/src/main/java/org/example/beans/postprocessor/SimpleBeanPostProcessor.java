@@ -1,6 +1,6 @@
 package org.example.beans.postprocessor;
 
-import org.example.beans.bean.SimpleBean;
+import org.example.beans.bean.scan.SimpleBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.stereotype.Component;

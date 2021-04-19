@@ -31,6 +31,11 @@ public class DefaultBeanLifecycle implements Ordered, SmartInitializingSingleton
         log.error("====> 回调的方法: {}, 次序: {}", "DefaultBeanLifecycle()", order.incrementAndGet());
     }
 
+    // ------ApplicationContextAwareProcessor.postProcessBeforeInitialization()-----------------------------------------
+    // ------invokeAwareInterfaces()---------
+    // SpringApplication.prepareBeanFactory() 准备Bean工厂就是把 BeanPostProcessor 加入到BeanPostProcessor
+    // AbstractBeanFactory.List<BeanPostProcessor> beanPostProcessors;
+
     @Override
     public void setEnvironment(Environment environment) {
         // 实例化完这个对象之后就回调这个环境
@@ -49,6 +54,10 @@ public class DefaultBeanLifecycle implements Ordered, SmartInitializingSingleton
         log.error("====> 回调的方法: {}, 次序: {}", "ApplicationContextAware", order.incrementAndGet());
     }
 
+    // private final Set<Class<?>> ignoredDependencyInterfaces = new HashSet<>();
+
+
+    // --------------------------------------------------------------------------------------------------------
 
     @Override
     public void afterPropertiesSet() {

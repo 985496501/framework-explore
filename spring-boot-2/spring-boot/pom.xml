@@ -28,6 +28,11 @@
             <artifactId>caffeine</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>org.example</groupId>
+            <artifactId>test-starter</artifactId>
+            <version>1.0-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -108,12 +113,6 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-jdbc</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>cc.jinyun</groupId>
-            <artifactId>bestsign-spring-boot-starter</artifactId>
-            <version>1.0</version>
         </dependency>
 
         <!--https://github.com/Sayi/poi-tl-->

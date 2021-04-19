@@ -5,9 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.AnnotatedGenericBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.context.annotation.AnnotatedBeanDefinitionReader;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigRegistry;
+import org.springframework.context.annotation.*;
 import org.springframework.context.support.GenericApplicationContext;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
@@ -42,7 +40,7 @@ public class AnnotationConfigApplicationContextTest {
     public final static AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
 
 
-    // -----------AnnotationConfigRegistry-----------------------------------------------------------------------
+    // -----------AnnotationConfigRegistry: 基于注解的BeanDefinition 注册到 BeanDefinitionRegistry------------------------
     /**
      * see {@link AnnotationConfigRegistry} context的直接实现
      * see {@link AnnotatedBeanDefinitionReader} {@link BeanDefinitionRegistry}
@@ -86,17 +84,43 @@ public class AnnotationConfigApplicationContextTest {
     }
 
     /**
+     * 测试这个特殊的注解 {@link EntryApplication} 的bean的具体细节
+     *
+     * 明确注册bean
+     */
+    @Test
+    public void springBootApplicationTest() {
+        // 先不加注解 可以直接扫描进入 当成一个普通的bean
+        // 加注解：变化仅仅是 AnnotatedBeanGenericDefinition 中的 metadata (StandardAnnotationMetata) 中的 mergedAnnotations (TypeMappedAnnotations)
+        // TypeMappedAnnotations: 可以解析注解完成 在这个对象中存储;
+        // 但是这个方法仅仅是new, 把当前的class存在这个对象里面了, Annotation[] 里面啥都没有;
+        context.register(EntryApplication.class);
+    }
+
+    /**
      * 正常情况下 我们不会 enumerate register bean
      *
      * 而是首先通过路径扫描的情况  ClassPathScanner
      * 下面的这个方法就是这样走的;
+     * 主要看 这个真正干活的 ClassPathScanner 过滤扫描那些类?
+     * see {@link ClassPathScanningCandidateComponentProvider}
+     * see {@link ClassPathBeanDefinitionScanner} 这个是对外暴露 classPath bean定义的扫描器; 它继承了上面这个类;
+     * 创建这个 class path BeanDefinition 扫描器 会注入一个默认的 AnnotationTypeFilter(Component.class)
+     *
+     * isCandidateComponent(metadataReader): 这个就是核心过滤方法;
+     *
+     * SimpleAnnotationMetadata: 扫描之后的注解封装成这个对象;
+     *
+     * 这块先不看了主要就是扫描 @Component 注解的类完成 BeanDefinition的注入;
+     * 在这个filter中同时走了 @Condition() 的逻辑判断;
+     * Set<BeanDefinition> scanCandidateComponents(String basePackage): 这个就是扫描候选组件
      *
      * 大体流程就是通过 resourceLoader 把 basePackage 下的class都读取进来 然后逐个过滤 然后 解析成BeanDefinition
      * 过滤完之后的 class 对象list 走的就是上面 register() 一样的逻辑了;
      */
     @Test
     public void scanTest() {
-        context.scan("org.example.beans.bean.scan");
+        context.scan("org.example.beans.bean.scan", "org.app.config");
     }
 
 
@@ -129,7 +153,19 @@ public class AnnotationConfigApplicationContextTest {
         // AnnotationMetaData.hasAnnotatedMethod(String annotationName)
     }
 
-    // -----------AnnotationConfigRegistry-----------------------------------------------------------------------
+    // -----------AnnotationConfigRegistry: 基于注解的BeanDefinition 注册到 BeanDefinitionRegistry -----------------
+
+
+
+
+    // -----------SingletonBeanRegistry: 可以直接把 beanName, Singleton 直接注册到IOC -------------------------------------
+
+
+
+
+
+
+
 
 
 

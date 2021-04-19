@@ -2,8 +2,6 @@ package org.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.context.annotation.Description;
-import org.springframework.web.bind.annotation.RestController;
 
 /**
  * SpringBoot Entry.
@@ -22,8 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
  * @author: jinyun
  * @date: 2021/2/8
  */
-@Description("整个应用核心启动类")
-@RestController
+//@Description("整个应用核心启动类")
+//@RestController
 @SpringBootApplication
 public class EntryApplication {
     public static void main(String[] args) {

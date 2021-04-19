@@ -17,6 +17,7 @@
         <module>spring-boot</module>
         <module>mybatis-explore</module>
         <module>spring-security</module>
+        <module>test-starter</module>
     </modules>
 
     <properties>

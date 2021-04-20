@@ -25,7 +25,7 @@ import org.springframework.context.annotation.AnnotationConfigApplicationContext
  * @author: jinyun
  * @date: 2021/3/26
  */
-public class AnnotationConfigurationTest {
+public class AnnotationConfiguraerTest {
 
     @Test
     public void annotationConfigApplicationContextTest() {

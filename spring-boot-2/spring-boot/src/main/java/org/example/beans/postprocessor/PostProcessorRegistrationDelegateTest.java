@@ -3,6 +3,12 @@ package org.example.beans.postprocessor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.asm.ClassReader;
+import org.springframework.beans.factory.config.BeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
+import org.springframework.beans.factory.support.BeanNameGenerator;
+import org.springframework.beans.factory.support.DefaultListableBeanFactory;
+import org.springframework.context.annotation.AnnotationBeanNameGenerator;
+import org.springframework.context.annotation.ConfigurationClassPostProcessor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.type.AnnotationMetadata;
 import org.springframework.core.type.ClassMetadata;
@@ -14,7 +20,7 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Facility for AbstractBeanFactory...
+ * Facility for AbstractBeanFactory... 这个类专门用于服务这个抽象Bean工厂的;
  * {@link org.springframework.beans.factory.support.AbstractBeanFactory}
  * <p>
  * 这个委派类真了不得, 专门用于处理 PostProcessor;  它维护了 BeanPostProcessor;
@@ -25,12 +31,72 @@ import java.nio.charset.StandardCharsets;
 @Slf4j
 public class PostProcessorRegistrationDelegateTest {
 
+    /**
+     * 首先执行 bean定义中心 后置处理器
+     * see {@link ConfigurationClassPostProcessor} 是 BeanDefinitionRegistryPostProcessor
+     * 的直接子类, 同时 也是BeanFactoryPostProcessor的实现类;
+     */
     @Test
-    public void registerPostProcessorTest() {
+    public void invokeBeanDefinitionRegistryPostProcessorsTest() {
+        DefaultListableBeanFactory beanDefinitionRegistry = new DefaultListableBeanFactory();
+
+        // 手动创建一个BeanDefinition
+        BeanDefinition beanDefinition = BeanDefinitionBuilder
+                .genericBeanDefinition(Configuraer.class).getBeanDefinition();
+        // 生成bean的名字
+        BeanNameGenerator beanNameGenerator = new AnnotationBeanNameGenerator();
+        String beanName = beanNameGenerator.generateBeanName(beanDefinition, beanDefinitionRegistry);
+        // 这个对象里面就有beanDefinitionMap;
+        beanDefinitionRegistry.registerBeanDefinition(beanName, beanDefinition);
+
+        ConfigurationClassPostProcessor postProcessor = new ConfigurationClassPostProcessor();
+
+        // 上面这个方法主要就是执行这个方法：
+        // postProcessor.postProcessBeanDefinitionRegistry(beanDefinitionRegistry);
+        // 实际就是执行下面这个方法。 build and validate a class annotated @Configuration
+        // 处理注解配置的 bean 定义;
+        postProcessor.processConfigBeanDefinitions(beanDefinitionRegistry);
+        // 看下个这个处理配置的bean定义究竟做了些啥  注意下面的所有操作都是基于 @Configuration 注解标识的;
+        // ==>  这个类又使用了一个Util,  ConfigurationUtils.checkConfigurationClassCandidate() 内部类不让用;
+        //      这个方法的目的就是检查是不是被@Configuration加上, 然后根据这个proxyMode=?true
+        //      在beanDefinition加入 attribute <String, String>
+        //      ConfigurationClassPostProcessor.configurationClass, full || lite
+        //      如果有order注解 也会设置属性 ConfigurationClassPostProcessor.order = x
+
+        // 然后封装成bfHolder, 通过order sort
+        // 解析每个@Configuration的class 了这要 引入了一个类： ConfigurationClassParser 配置类解析器
+        // ConfigurationClassParser.processConfigurationClass(ConfigurationClass, filter)
+
+        // 这里又一个重点：递归处理 配置类 和 它的父类; sourceClass = asSourceClass(ConfigurationClass, SourceClass)
+        // doProcessConfigurationClass(ConfigurationClass, SourceClass, filter)
+        // 1 todo: 递归解析 内部成员类 主要标识@Component
+        // 2 @PropertySource.class 这个没怎么用到过先不看
+        // 3 @ComponentScan 主要是解析 Scan Scans 的value定义的属性 主要就是获取classpath的相对路径 先不看
+        // 4 @Import 这个注解应该看一下, 我们经常在源码中看到 @Import(xx.class) @Configuration
+        // ==>  ConfigurationClassParser.processImports(ConfigurationClass, SourceClass, Collection<SourceClass>, Predicate)
+        //      Set<SourceClass> getImports() 把import类引入class获取然后
+        //      判断 isAssignalbe(ImportSelector.class) 这个先不看 好像也遇到过再说
+        //      然后在看 isAssignable(ImportBeanDefinitionRegistrar.class) 嗯这个常用这个是 可以import一个然后批量注入beanDefinitions
+        //      最后把默认的 bean定义注册进去;
+        // 5 @ImportResource 没怎么遇到过先不看
+        // 6 @Bean 这个又是重中之重了 这个是在beanDefinition层面所以没有做多少事 仅仅是封装了BeanMethod对象往ConfigurationClass里面一塞
+        //   每个@Configuration的配置的class对象都会封装成 ConfigurationClass 对象
 
     }
 
 
+    /**
+     * 这个类就是专门用来解析 @Configuration
+     *
+     * 并且创建这个对象的需要传入(MetadataReaderFactory) 它可以生产reader, 这个reader使用asm算法
+     * 来load类, 在jvm深层解析class.  这个ASM实现避免了大量的反射 和 热类加载, 为了有效的处理 lazy class;
+     *
+     * todo: 这里还有一个类 ConditionEvaluator 这个类用于前置判断 @Conditional
+     */
+    @Test
+    public void configurationClassParserTest() {
+
+    }
 
 
 

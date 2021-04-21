@@ -2,7 +2,6 @@ package org.example.websocket.config;
 
 import org.example.websocket.handler.WebSocketServer;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
-import org.springframework.context.annotation.Configuration;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.web.socket.config.annotation.EnableWebSocket;
 import org.springframework.web.socket.config.annotation.WebSocketConfigurer;
@@ -43,7 +42,7 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
  * @author: jinyun
  * @date: 2021/2/23
  */
-@Configuration
+//@Configuration
 @EnableWebSocket
 public class WebsocketConfig implements WebSocketConfigurer {
     final WebSocketServer socketSessionHandler;

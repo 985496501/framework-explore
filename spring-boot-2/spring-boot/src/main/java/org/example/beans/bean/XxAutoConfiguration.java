@@ -7,6 +7,6 @@ import org.springframework.context.annotation.Configuration;
  * @date: 2021/4/16
  */
 
-@Configuration(proxyBeanMethods = false)
+//@Configuration(proxyBeanMethods = false)
 public class XxAutoConfiguration {
 }

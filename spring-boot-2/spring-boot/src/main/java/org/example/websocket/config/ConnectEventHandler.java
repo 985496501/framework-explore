@@ -7,7 +7,6 @@ import com.corundumstudio.socketio.annotation.OnDisconnect;
 import com.corundumstudio.socketio.annotation.OnEvent;
 import lombok.extern.slf4j.Slf4j;
 import org.example.websocket.EndPoint;
-import org.springframework.stereotype.Service;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -17,7 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
  * @date: 2021/4/7
  */
 @Slf4j
-@Service
+//@Service
 public class ConnectEventHandler implements EndPoint {
     public static final ConcurrentHashMap<Long, SocketIOClient> sessionMap = new ConcurrentHashMap<>(16);
 

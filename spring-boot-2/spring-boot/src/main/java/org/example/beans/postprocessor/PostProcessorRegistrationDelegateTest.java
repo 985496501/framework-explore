@@ -3,6 +3,7 @@ package org.example.beans.postprocessor;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.Test;
 import org.springframework.asm.ClassReader;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.BeanNameGenerator;
@@ -30,7 +31,7 @@ import java.nio.charset.StandardCharsets;
  */
 @Slf4j
 public class PostProcessorRegistrationDelegateTest {
-
+    private static final DefaultListableBeanFactory beanDefinitionRegistry = new DefaultListableBeanFactory();
     /**
      * 首先执行 bean定义中心 后置处理器
      * see {@link ConfigurationClassPostProcessor} 是 BeanDefinitionRegistryPostProcessor
@@ -38,8 +39,6 @@ public class PostProcessorRegistrationDelegateTest {
      */
     @Test
     public void invokeBeanDefinitionRegistryPostProcessorsTest() {
-        DefaultListableBeanFactory beanDefinitionRegistry = new DefaultListableBeanFactory();
-
         // 手动创建一个BeanDefinition
         BeanDefinition beanDefinition = BeanDefinitionBuilder
                 .genericBeanDefinition(Configuraer.class).getBeanDefinition();
@@ -81,7 +80,18 @@ public class PostProcessorRegistrationDelegateTest {
         // 5 @ImportResource 没怎么遇到过先不看
         // 6 @Bean 这个又是重中之重了 这个是在beanDefinition层面所以没有做多少事 仅仅是封装了BeanMethod对象往ConfigurationClass里面一塞
         //   每个@Configuration的配置的class对象都会封装成 ConfigurationClass 对象
+    }
 
+
+    /**
+     * getBean() 这个方法必须又beanDefinition
+     */
+    @Test
+    public void getBeanTest() {
+        invokeBeanDefinitionRegistryPostProcessorsTest();
+
+        BeanFactory beanFactory = beanDefinitionRegistry;
+        beanFactory.getBean("configuraer");
     }
 
 

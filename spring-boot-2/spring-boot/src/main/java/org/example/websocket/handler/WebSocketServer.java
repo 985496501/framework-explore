@@ -2,7 +2,6 @@ package org.example.websocket.handler;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpHeaders;
-import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketMessage;
@@ -21,7 +20,7 @@ import java.util.Map;
  * @date: 2021/2/23
  */
 @Slf4j
-@Component
+//@Component
 public class WebSocketServer extends TextWebSocketHandler {
 
     @Override

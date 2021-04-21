@@ -1,13 +1,11 @@
 package org.example.websocket.controller;
 
 
-import org.springframework.stereotype.Controller;
-
 /**
  * @author: jinyun
  * @date: 2021/4/7
  */
-@Controller
+//@Controller
 public class ImController {
 
 /*    @MessageMapping("")

@@ -1,8 +1,6 @@
 package test;
 
 import cn.hutool.json.JSONUtil;
-import lombok.AllArgsConstructor;
-import lombok.Data;
 import org.example.EntryApplication;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -14,7 +12,6 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -54,8 +51,8 @@ public class RedissonTest {
 
     @Test
     public void listTest() {
-        List<Student> list = new ArrayList<>();
-        list.add(new Student(1, "刘津运"));
+        List<Pojo.Student> list = new ArrayList<>();
+        list.add(new Pojo.Student(1, "刘津运"));
 
         ListOperations<Object, Object> listOperations = redisTemplate.opsForList();
         // list: list操作一般用于什么场景呢， 它是一个 [] - [] - []  基本不用啊
@@ -63,19 +60,4 @@ public class RedissonTest {
     }
 
 
-
-
-
-
-    /**
-     * 需要显示实现 serializable 不然实例化失败
-     *
-     * 如果这么用对象纯属会出现很大问题 redis客户端展示的 16进制
-     */
-    @AllArgsConstructor
-    @Data
-    static class Student implements Serializable {
-        private int num;
-        private String userName;
-    }
 }

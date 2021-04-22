@@ -2,7 +2,6 @@ package org.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
-import org.springframework.stereotype.Service;
 
 /**
  * SpringBoot Entry.
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
  */
 //@Description("整个应用核心启动类")
 //@RestController
-    @Service
 @SpringBootApplication
 public class EntryApplication {
     public static void main(String[] args) {

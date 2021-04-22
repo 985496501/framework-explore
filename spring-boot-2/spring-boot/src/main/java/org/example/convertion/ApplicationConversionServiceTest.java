@@ -1,4 +1,4 @@
-package org.example.convention;
+package org.example.convertion;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.convert.ApplicationConversionService;

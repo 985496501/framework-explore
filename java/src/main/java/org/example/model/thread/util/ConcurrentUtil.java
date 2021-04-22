@@ -3,7 +3,7 @@ package org.example.model.thread.util;
 /**
  * java提供的并发工具类, 谈一下? 唉 模板提问?
  * 你对 java.util.concurrent.* 这个包的了解情况;
- * E:\app\jdk\jre\lib\rt.jar!\java\util\concurrent
+ *
  *
  *
  * @author: jinyun

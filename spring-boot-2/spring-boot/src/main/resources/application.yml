@@ -37,9 +37,30 @@ spring:
     timeout: 1s # connectin timeout
 
 
+  kafka:
+    client-id: tracking-system
+    # cluster
+    bootstrap-servers:
+      - 8.136.103.221:9092
+      - 8.136.101.75:9092
+      - 8.136.106.190:9092
+    # producer
+    producer:
+      retries: 0
+      acks: 1
+      batch-size: 16384
+      buffer-memory: 33554432
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+    consumer:
+      group-id: defaultConsumerGroup
+      enable-auto-commit: true
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      max-poll-records: 50
 
-
-
+    listener:
+      type: batch
 
 
 

@@ -11,6 +11,8 @@ import org.springframework.util.ReflectionUtils;
 import java.lang.reflect.Method;
 
 /**
+ * 这个是redisson这个框架定义的 自定义器 可以自主完成完成 redis 的 config;
+ *
  * @author: jinyun
  * @date: 2021/4/21
  */

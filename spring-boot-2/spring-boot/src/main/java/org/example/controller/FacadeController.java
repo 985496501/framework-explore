@@ -14,11 +14,11 @@ import java.util.HashMap;
  */
 @RestController
 public class FacadeController {
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private KafkaTemplate<String, String> kafkaTemplate;
 
-    public FacadeController(KafkaTemplate<String, String> kafkaTemplate) {
-        this.kafkaTemplate = kafkaTemplate;
-    }
+//    public FacadeController(KafkaTemplate<String, String> kafkaTemplate) {
+//        this.kafkaTemplate = kafkaTemplate;
+//    }
 
     @GetMapping("kafka/producer")
     public void sendMsg() {

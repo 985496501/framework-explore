@@ -2,6 +2,7 @@ package org.example;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 
 /**
  * SpringBoot Entry.
@@ -20,9 +21,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
  * @author: jinyun
  * @date: 2021/2/8
  */
-//@Description("整个应用核心启动类")
-//@RestController
-@SpringBootApplication
+@SpringBootApplication(exclude = KafkaAutoConfiguration.class)
 public class EntryApplication {
     public static void main(String[] args) {
         SpringApplication.run(EntryApplication.class, args);

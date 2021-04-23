@@ -16,9 +16,9 @@ public class RedissonAutoConfiguration {
 
     /**
      * json的序列化方式使用fastJson
-     *         ObjectMapper objectMapper = new ObjectMapper();
-     *         // 定制objectMapper的转换参数, 允许null, fitler null;
-     *         GenericJackson2JsonRedisSerializer redisSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
+     * ObjectMapper objectMapper = new ObjectMapper();
+     * 定制objectMapper的转换参数, 允许null, fitler null;
+     * GenericJackson2JsonRedisSerializer redisSerializer = new GenericJackson2JsonRedisSerializer(objectMapper);
      *
      * @param factory
      * @return

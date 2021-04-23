@@ -4,6 +4,8 @@ import cn.hutool.json.JSONUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.redisson.config.Config;
 import org.redisson.config.SingleServerConfig;
+import org.redisson.connection.ConnectionManager;
+import org.redisson.connection.SingleConnectionManager;
 import org.redisson.spring.starter.RedissonAutoConfigurationCustomizer;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ReflectionUtils;
@@ -12,6 +14,13 @@ import java.lang.reflect.Method;
 
 /**
  * 这个是redisson这个框架定义的 自定义器 可以自主完成完成 redis 的 config;
+ *
+ * 下面这个Confgi十分的重要
+ *
+ * 因为通过这样创建了 ConnectionManager  see {@link ConnectionManager}
+ *
+ * 我们看单体的 singleServerConfig()
+ * see {@link SingleConnectionManager}
  *
  * @author: jinyun
  * @date: 2021/4/21

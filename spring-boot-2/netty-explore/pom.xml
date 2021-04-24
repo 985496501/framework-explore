@@ -23,5 +23,11 @@
             <artifactId>netty-all</artifactId>
             <version>4.1.56.Final</version>
         </dependency>
+
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+<!--            <scope>test</scope>-->
+        </dependency>
     </dependencies>
 </project>

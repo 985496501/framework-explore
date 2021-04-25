@@ -17,7 +17,7 @@ import java.lang.reflect.Method;
  *
  * 下面这个Confgi十分的重要
  *
- * 因为通过这样创建了 ConnectionManager  see {@link ConnectionManager}
+ * 因为通过这样创建了{@link ConnectionManager}
  *
  * 我们看单体的 singleServerConfig()
  * see {@link SingleConnectionManager}

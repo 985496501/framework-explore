@@ -1,11 +1,9 @@
 package org.example.listener;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.boot.ConfigurableBootstrapContext;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.SpringApplicationRunListener;
 import org.springframework.context.ConfigurableApplicationContext;
-import org.springframework.core.env.ConfigurableEnvironment;
 
 /**
  * @author: jinyun
@@ -21,7 +19,7 @@ public class SpringApplication2RunListenerListener implements SpringApplicationR
         this.args = args;
     }
 
-    @Override
+/*    @Override
     public void starting(ConfigurableBootstrapContext bootstrapContext) {
         log.info("starting(ConfigurableBootstrapContext bootstrapContext)");
     }
@@ -29,7 +27,7 @@ public class SpringApplication2RunListenerListener implements SpringApplicationR
     @Override
     public void environmentPrepared(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) {
         log.info("environmentPrepared(ConfigurableBootstrapContext bootstrapContext, ConfigurableEnvironment environment) ");
-    }
+    }*/
 
     @Override
     public void contextPrepared(ConfigurableApplicationContext context) {

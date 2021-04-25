@@ -9,6 +9,7 @@ import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
+import io.netty.util.concurrent.DefaultThreadFactory;
 
 /**
  * 继续探索netty
@@ -47,8 +48,10 @@ public class MainNetty {
      */
     public static void main(String[] args) {
         // 线程的最大效率：　那个公式 看下操作系统的课本 学习下操作系统回去 2021-4-23
-        NioEventLoopGroup bossGroup = new NioEventLoopGroup(1);
-        NioEventLoopGroup workerGroup = new NioEventLoopGroup(4);
+        // thread: boss-poolId-nextId, 仅仅会有一个boss-1-1 RUNNING, 这个nthreads 你无论传什么 都是1
+        NioEventLoopGroup bossGroup = new NioEventLoopGroup(new DefaultThreadFactory("boss"));
+        // 没有工作线程, 应该是懒的, 有任务需求的时候才会创建工作线程
+        NioEventLoopGroup workerGroup = new NioEventLoopGroup(4, new DefaultThreadFactory("worker"));
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
@@ -57,13 +60,13 @@ public class MainNetty {
                     .handler(new LoggingHandler(LogLevel.INFO))
                     .childHandler(new ChannelInitializer<Channel>() {
                         @Override
-                        protected void initChannel(Channel channel) throws Exception {
+                        protected void initChannel(Channel channel) {
 
                         }
                     });
 
             ChannelFuture f = b.bind(9632).sync();
-            f.channel().closeFuture().sync();
+            f.channel().closeFuture().sync(); // main 线程wait, 等待关闭唤醒
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {

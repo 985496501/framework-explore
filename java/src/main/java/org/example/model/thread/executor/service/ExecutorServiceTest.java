@@ -1,100 +1,17 @@
-package com.example.core;
+package org.example.model.thread.executor.service;
 
-import io.netty.channel.DefaultEventLoop;
-import io.netty.channel.DefaultSelectStrategyFactory;
-import io.netty.channel.EventLoopGroup;
-import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.util.concurrent.*;
-import io.netty.util.internal.PlatformDependent;
+import org.example.model.thread.util.Sleeper;
 import org.junit.Test;
 
-import java.nio.channels.spi.SelectorProvider;
 import java.util.concurrent.*;
-import java.util.concurrent.Future;
 
 /**
- * Netty 抽象的  事件循环组
- * 看看它做了什么事情
+ * {@link ExecutorService} 主要是这个接口的方法定义探索
  *
- * @author: Liu Jinyun
- * @date: 2021/4/10/23:42
+ * @author: jinyun
+ * @date: 2021/4/25
  */
-public class EventLoopGroupTest {
-    public static void main(String[] args) {
-        /**
-         * 我们需要看这个NioEventLoopGroup()的全参构造方法 我们看下这个究竟看了些事情, 向操作系统申请了那些资源
-         * 所有的中间件 再网络通信方便都使用了 EventLoopGroup 这个线程模型;
-         * new NioEventLoopGroup(); 实际上就是默认参数:
-         * -nthread=Processor * 2
-         * -executor=null
-         * -DefaultEventExecutorChooserFactory.INSTANCE  默认使用了 simple round-robin todo: 具体看这个选择策略， 来了一个任务, 选择哪个 EventExecutor
-         * -RejectedExecutionHandlers.reject() 拒绝策略
-         * -selectProvider.provider()  {@link SelectorProvider} platform-standalone todo: 看这个平台相关的封装了系统调用的 多路复用器
-         * -selectStrategyFactory  {@link DefaultSelectStrategyFactory} todo: 选择select() 系统调用的选择策略, 策略工厂 后面具体看
-         *
-         *
-         * see{@link MultithreadEventExecutorGroup} 它就是 NioEventLoopGroup 的核心基类;
-         * 多线程 事件执行器 组, 是事件执行器组的事件, 名字看出就是多线程 同时 处理任务;
-         *
-         *
-         * 0. 创建一个执行器, {@link java.util.concurrent.Executor} 它的默认实现类： {@link ThreadPerTaskExecutor}
-         * 我们仅仅看 执行器执行方法, 它就是一个来一个任务 通过工厂创建一个线程执行任务, 执行完就释放了, 创建这个对象需要一个工厂
-         * 可以使用 Netty 的 名称工厂: {@link DefaultThreadFactory}
-         *
-         *
-         * 1. 首先声明了 EventExecutor[nthread] {@link io.netty.util.concurrent.EventExecutor}, 默认就是 nthread = processor * 2;
-         * 然后newChild(executor, args) 创建 事件执行器; 事件执行器应该有： 事件NIO事件 和 处理事件的线程就是 executor； 然后就跳到了
-         * {@link NioEventLoopGroup} 也就是我们探究的这个类;
-         * 创建 {@link io.netty.channel.EventLoop} 注意这个packageName;
-         * 实际上创建的是 {@link io.netty.channel.nio.NioEventLoop} 都是channel包下的;
-         * 创建这个对象需要的默认参数:
-         * 1. {@link NioEventLoopGroup} parent;  not null;
-         * 2. {@link java.util.concurrent.Executor} executor;
-         * 3. {@link SelectorProvider} selectorProvider;
-         * 4. {@link io.netty.channel.SelectStrategy} strategy;
-         * 5. {@link io.netty.util.concurrent.RejectedExecutionHandler} rejectedExecutionHandler;
-         * 6. {@link io.netty.channel.EventLoopTaskQueueFactory} queueFactory;
-         *
-         * 首先我们需要看它的父类也是一个模板类：{@link io.netty.channel.SingleThreadEventLoop}
-         * 看到名字就知道是 单线程事件循环,
-         * 它完成了哪些初始化方法: [申请了哪些资源]
-         * parent, executor, false, taskQueue, tailTaskQueue, rejectedHandler
-         * 这个单线程事件循环就干了一件事就是 维持了 tailTasks = tailTaskQueue;
-         *
-         * 又声明了它的父类：{@link io.netty.util.concurrent.SingleThreadEventExecutor}
-         * 单线程事件执行器:
-         *
-         * 有调用了它的父类: {@link AbstractEventExecutor} 这个是 EventExecutor 的基类实现;
-         * parent 就维护在这个抽象类里;
-         *
-         *
-         *
-         * static Queue<Runnable> newTaskQueue(EventLoopTaskQueueFactory) 因为这个方法在Nio
-         * 事件循环这个类里面, 所以 所以它通过任务队列工厂 创建任务队列;
-         * 最后创建的队列 {@link PlatformDependent#newMpscQueue(int)} todo: 如何利用无锁完成n生产者: 1消费者 的设计就在这  以及 linkedBlockingQueue的实现;
-         *
-         *
-         * 2.
-         *
-         *
-         *
-         */
-        EventLoopGroup eventExecutors = new NioEventLoopGroup();
-    }
-
-
-    /**
-     * 事件 执行器：
-     * 什么是事件执行器? 一种特殊的 时间执行器组, 同时 它提供了方法来查看当前线程是不是在 事件循环中;
-     * 它同时继承了事件执行器组, 提供了一般的获取方法;
-     *
-     *
-     *
-     */
-    public void eventExecutorTest() {
-        EventExecutor executor = new DefaultEventLoop();
-    }
-
+public class ExecutorServiceTest {
     /**
      * // todo: 抽取到 concurrent package 下;
      * {@link java.util.concurrent.Executor} 执行器, 执行提交的任务, 屏蔽了你用哪个线程执行任务, 具体调度的细节;
@@ -188,21 +105,71 @@ public class EventLoopGroupTest {
      * {@link FutureTask}这个类作为默认实现, 同时它允许 子类覆盖这个方法, 自定义自己的任务;
      * FutureTask:
      * volatile int state; 1. 保证内存的可见性; 防止指令重排  todo: 如何保证, 既然是关键字, 那么编译器是怎么编译成OS保证的标识的呢?
-     * 1. 创建这个任务的时候 state = NEW (0)
+     * 1. 创建这个任务的时候 state = NEW (0)  : 这个状态是多线程竞争的 所以被设计成原子操作, 多线程访问这个FutureTask都首先通过state判断;
+     * outcome: 这个是结果任务, 因为它的前后被 state 原子操作包裹 不用 volatile;
+     * runner: 这个也是线程竞争的, 多线程有可能抢占任务;
+     * waiters: 这个是堆栈, 就是在堆中的 栈数据结构; 先进后出; 首先来的压栈? todo:
+     *
      * 2. 直接看它的run(); 先判断任务是不是新建状态啊, 不是直接返回；
      *      是新建状态, 使用原子操作 为当前任务设置执行线程, 如果失败直接返回, 这里就体现了多线程竞争任务的代码;
      *      然后设置了ran标识 try 包裹任务方法, 人家也不知道你的任务成功还是失败;
      *      如果成功了把结果给result; 先原子操作 设置任务状态为 Completing, 然后设置值,
      *      这里使用原子操作是因为有其他线程进行get(), 也就是说 Completing 代表任务执行成功了,
-     *      没有异常的发生,但是你get()是获取不到值的, 然后再进行normal设置, 这就是最终的完成状态了,
+     *      - 没有异常的发生,但是你get()是获取不到值的, 然后再进行normal设置, 这就是最终的完成状态了,
      *      最后调用一个 finishCompletion() 这个方法肯定是唤醒get() 请求的线程的; 我猜;
-     *      果然如此;
+     *      果然如此; 唤醒操作: todo: 这个必须先看下 get();
+     *      - 如果任务执行出现了异常, result=null; fan=false; setExeception(ex);
+     *      还是原子操作锁住 任务完成, 然后 输出结果就是异常, 然后任务的状态就是 exceptional;
+     *      同时唤醒 其他等待线程;
      *
+     *      唤醒操作, 让堆栈的线程从头到尾 依次进行唤醒操作;
      *
+     *      最后都会执行的是: runner 必须是非空 直到任务状态 被设置成final state状态, todo: ? 这个注释的意思
+     *      然后查看 任务的状态 是不是 interupting 或者  interrupted 如果是后面就是取消任务的操作了 todo: ...
+     *
+     * 3. 我们看下get方法; 让获取线程直接进入堆栈的操作; 标准的并发编程的实现包：
+     *      首先通过操作系统提供的 nanoTime 获取 deadline; 这个就是允许自旋获取的最后时间
+     *      开始自旋;
+     *      首先判断当前线程是否中断;  {@link Thread#interrupted()} 这个会调用native方法, 检查线程的中断标识位是否被中断
+     *      如果是就清除 中断标识位; 然后在应用程序中继续抛出中断异常, 由应用程序自己处理中断;
+     *      todo: 具体的实现后面再看吧；
+     *      awaitDone(timed, nacos)
+     *      具体就是如果状态是Completing就是让出CPU的执行权, 如果大于 Completing 就返回state; 首先是状态, 状态无法返回才会自旋;
+     *      第一次自旋; q = null; 然后创建一个waitNode节点;
+     *      第二次自旋; queued = false; 通过 compareAndSwapObject(this, offset, source, target)
+     *      q.next = waiters, q; 原子操作头擦法 将最新的插入到 链表的头部;
+     *      第三次自旋; 如果timed=false; 直接将当前线程park(this);
+     *
+     * Notes: {@link Future} 这个类提供了模板方法吧相当于, 因为它定义了最基本的任务的状态; 是Runnable, Future的封装;
+     * 有任务 有执行, 而且还定义了执行任务, 读取任务状态的同步方法, 可以自定义 用户自己的任务?
      */
     @Test
     public void abstractExecutorService() {
-
     }
 
+
+    /**
+     * {@link ScheduledExecutorService} 它是个接口, 它定义了 ExecutorService 可以在某些延迟下, 周期性调用重复的任务,
+     * execute(): 就是不延迟的执行任务;
+     * schedule(): 一次执行
+     * {@link ScheduledExecutorService#scheduleAtFixedRate(java.lang.Runnable, long, long, java.util.concurrent.TimeUnit)}
+     * execute: initialDelay + period * n 固定的频率执行, 完全以时间为准
+     *
+     * {@link ScheduledExecutorService#scheduleWithFixedDelay(java.lang.Runnable, long, long, java.util.concurrent.TimeUnit)}
+     * execute: 以结果获取的时间 然后重新开始 commence
+     *
+     * commence: 开始    start 的高级词汇；
+     * proceed: 进行中
+     */
+    @Test
+    public void scheduledServiceExecutorTest() {
+        ScheduledExecutorService scheduledExecutorService
+                = Executors.newSingleThreadScheduledExecutor();
+
+        scheduledExecutorService.scheduleWithFixedDelay(() -> System.out.println("hello world"),
+                0, 2, TimeUnit.SECONDS);
+
+       // scheduledExecutorService.shutdown();
+        Sleeper.sleep(10);
+    }
 }

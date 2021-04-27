@@ -17,6 +17,9 @@ import java.util.Arrays;
 import java.util.Map;
 
 /**
+ *
+ *
+ *
  * @author: jinyun
  * @date: 2021/4/25
  */
@@ -27,8 +30,9 @@ public class ParameterNameDiscoverTest {
      */
     @Test
     public void parameterNameDiscoverTest() {
-        ParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
+//        org.springframework.data.repository.util.ClassUtils
         Method method = ClassUtils.getMethod(MethodHolder.class, "getMethod", DedicatedParam.class);
+        ParameterNameDiscoverer discoverer = new LocalVariableTableParameterNameDiscoverer();
         String[] parameterNames = discoverer.getParameterNames(method);
 
         SpelExpressionParser parser = new SpelExpressionParser();

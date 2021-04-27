@@ -1,4 +1,4 @@
-package org.example.model.thread.executor.aqs;
+package org.example.model.thread.lock.aqs;
 
 import org.example.model.thread.util.Sleeper;
 import org.junit.Test;

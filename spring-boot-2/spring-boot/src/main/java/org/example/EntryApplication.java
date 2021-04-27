@@ -1,7 +1,11 @@
 package org.example;
 
+
+import org.redisson.spring.starter.RedissonAutoConfiguration;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
+import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
 
 /**
@@ -21,7 +25,8 @@ import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
  * @author: jinyun
  * @date: 2021/2/8
  */
-@SpringBootApplication(exclude = KafkaAutoConfiguration.class)
+@SpringBootApplication(exclude = {KafkaAutoConfiguration.class, RedisAutoConfiguration.class, RedissonAutoConfiguration.class,
+        DataSourceAutoConfiguration.class})
 public class EntryApplication {
     public static void main(String[] args) {
         SpringApplication.run(EntryApplication.class, args);

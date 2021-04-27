@@ -1,6 +1,8 @@
 package org.example.config;
 
 import com.alibaba.fastjson.support.spring.FastJsonRedisSerializer;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
+import org.springframework.boot.autoconfigure.data.redis.RedisAutoConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -11,6 +13,7 @@ import org.springframework.data.redis.serializer.RedisSerializer;
  * @author: jinyun
  * @date: 2021/4/22
  */
+@ConditionalOnBean(RedisAutoConfiguration.class)
 @Configuration(proxyBeanMethods = false)
 public class RedissonAutoConfiguration {
 

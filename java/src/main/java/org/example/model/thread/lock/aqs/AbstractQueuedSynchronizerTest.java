@@ -1,4 +1,4 @@
-package org.example.model.thread.executor.aqs;
+package org.example.model.thread.lock.aqs;
 
 import org.example.model.thread.util.Sleeper;
 import org.junit.Test;
@@ -375,23 +375,6 @@ public class AbstractQueuedSynchronizerTest implements QueueOperation, ExportedM
 
 
     // 这里就是一个简单的双向列表, 还是单线程下进行操作
-
-    /**
-     * 没有并发操作的。
-     */
-    @Test
-    public void nodeTest() {
-        Node current = new Node(1);
-        // 前驱
-        Node predecessor = new Node(0);
-        // 后继
-        Node successor = new Node(2);
-        // 使用双向链表
-        current.next = successor;
-        current.prev = current;
-        predecessor.next = current;
-        successor.prev = current;
-    }
 
     /**
      * node

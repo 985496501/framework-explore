@@ -4,11 +4,11 @@ server: # ServerProperties 配置ServletWebServer
   compression:
     enabled: true # default false
   ssl:
-    enabled: true # default true
+    enabled: false # default true
   undertow: # embedded server thread model
     threads:
       io: 1
-      worker: 4
+      worker: 16
   shutdown: graceful # default immediate, graceful 处理完所有的请求才会关闭线程池
 
 

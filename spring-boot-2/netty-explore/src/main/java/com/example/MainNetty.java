@@ -28,11 +28,22 @@ import io.netty.util.concurrent.DefaultThreadFactory;
  * IO模型
  * 事件驱动
  * 其他框架对netty包的使用
+ *
+ * netty对粘包 拆包 的支持：
+ *
+ *
  * <p>
  * Netty的架构设计, 接口的分层设计
  * <p>
  * <p>
  * 首先提出问题
+ *
+ *
+ *
+ * <a href="https://www.wireshark.org/download.html">抓包工具</a>
+ * 什么时候这个抓包工具适配了 MAC OS,  arm版本 我就买MAC
+ *
+ *
  *
  * @author: jinyun
  * @date: 2021/2/9

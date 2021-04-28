@@ -15,10 +15,13 @@ import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.context.annotation.*;
 import org.springframework.context.support.AbstractApplicationContext;
 import org.springframework.context.support.GenericApplicationContext;
+import org.springframework.core.ResolvableType;
 import org.springframework.core.env.StandardEnvironment;
 import org.springframework.core.type.AnnotatedTypeMetadata;
 
 import java.lang.reflect.Modifier;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * 1. 首先探索完成 BeanDefinition 的创建 然后注册到 BeanDefinitionRegistry的过程;
@@ -277,7 +280,7 @@ public class AnnotationConfigApplicationContextTest {
      * <p>
      * 真正创建bean; {@link AbstractAutowireCapableBeanFactory}
      * doCreateBean(beanName, RootBeanDefinition, args): 这个方法 解决了 循环依赖 的麻烦;
-     *
+     * <p>
      * 这个方式就是实际创建bean的过程, Pre-creation 在这已经发生了
      * 然后这个方法会选择 是使用默认bean实例化，还是使用工厂方法, 还是使用构造方法自动注入3中方式;
      * <p>
@@ -285,45 +288,45 @@ public class AnnotationConfigApplicationContextTest {
      * createBeanInstance():
      * 必须有class对象, 这个类必须是public, 这个beanDefinition 必须允许获取获取非public权限
      * 创建对象：
-     *  1. instanceSupplier
-     *  2. factoryMethod
-     *  3. @Autowired
-     *  4. default constructor, autowire Constructor
-     *  5. instantiateBean(beanName, mbd)
-     *
-     *
-     *  今天必须把 cycle dependency;
-     *
-     *
-     *  具体看这个方法:
-     *  {@link InstantiationStrategy#instantiate(org.springframework.beans.factory.support.RootBeanDefinition,
-     *                              java.lang.String, org.springframework.beans.factory.BeanFactory)}
-     *
-     *  处理循环依赖的方法 {@link AbstractAutowireCapableBeanFactory}  doCreateBean(x, x, x)
-     *  实例化对象就仅仅是使用合适的方法 把 这个 beanName 的对象创建出来, 返回这个  BeanWrapper<类型, 这个单例对象>
-     *
-     *      1. 开始处理循环依赖: 这里处理循环依赖必须是单例对象, 而且当前这个抽象注入能力的bean工厂 允许循环依赖  allowCircularReferences,
-     *  而且上面这个这个beanName 已经预存在 singletonsCurrentlyInCreation. 那么这个beanName是什么时候塞进这个单例正在创建中呢?
-     *  beforeSingletonCreation(String beanName) 将beanName放入到 singletonsCurrentlyInCreation;
-     *  这里有一个变量是 earlySingletonExposure, 这个就是是否提前暴露单例引用： 也是处理循环依赖的开关;
-     *
-     *  在上面这个方法中, 如果必须 true && true, 后面就是在  单例对象正在创建中 添加一定成功, flase;
-     *  前面还有一段判断， inCreationCheckExclusion
-     *  什么情况才会报正在创建中的错误? 添加正在创建单例对象失败, 并且这个对象名还没有包括在创建检查中 就会报错;
-     *
-     *  在这里方法中调用 {@link DefaultSingletonBeanRegistry#getSingleton(java.lang.String, org.springframework.beans.factory.ObjectFactory)}
-     *      2. 如果满足上面的条件, 就添加了一层缓存, addSingletonFactory(beanName, singletonFactory) DefaultSingletonBeanRegistry中的方法;
-     *      可以看出这个 默认的单例bean注册中心; 维护了单例池; 单例对象工厂;
-     *  加锁, 同步所有线程的方法, singletonObjects 单例池:
-     *  singletonFactories.put(beanName, singletonFactory);
-     *  earlySingletonObjects.remove(beanName); 但是这个好像是没有值的? 那么问题来了这个 earlySingletonObjects 是淦什么用的?
-     *  registeredSingletons.set(beanName) 把这个单例bean放入已经注册池中;
-     *
-     *
+     * 1. instanceSupplier
+     * 2. factoryMethod
+     * 3. @Autowired
+     * 4. default constructor, autowire Constructor
+     * 5. instantiateBean(beanName, mbd)
+     * <p>
+     * <p>
+     * 今天必须把 cycle dependency;
+     * <p>
+     * <p>
+     * 具体看这个方法:
+     * {@link InstantiationStrategy#instantiate(org.springframework.beans.factory.support.RootBeanDefinition,
+     * java.lang.String, org.springframework.beans.factory.BeanFactory)}
+     * <p>
+     * 处理循环依赖的方法 {@link AbstractAutowireCapableBeanFactory}  doCreateBean(x, x, x)
+     * 实例化对象就仅仅是使用合适的方法 把 这个 beanName 的对象创建出来, 返回这个  BeanWrapper<类型, 这个单例对象>
+     * <p>
+     * 1. 开始处理循环依赖: 这里处理循环依赖必须是单例对象, 而且当前这个抽象注入能力的bean工厂 允许循环依赖  allowCircularReferences,
+     * 而且上面这个这个beanName 已经预存在 singletonsCurrentlyInCreation. 那么这个beanName是什么时候塞进这个单例正在创建中呢?
+     * beforeSingletonCreation(String beanName) 将beanName放入到 singletonsCurrentlyInCreation;
+     * 这里有一个变量是 earlySingletonExposure, 这个就是是否提前暴露单例引用： 也是处理循环依赖的开关;
+     * <p>
+     * 在上面这个方法中, 如果必须 true && true, 后面就是在  单例对象正在创建中 添加一定成功, flase;
+     * 前面还有一段判断， inCreationCheckExclusion
+     * 什么情况才会报正在创建中的错误? 添加正在创建单例对象失败, 并且这个对象名还没有包括在创建检查中 就会报错;
+     * <p>
+     * 在这里方法中调用 {@link DefaultSingletonBeanRegistry#getSingleton(java.lang.String, org.springframework.beans.factory.ObjectFactory)}
+     * 2. 如果满足上面的条件, 就添加了一层缓存, addSingletonFactory(beanName, singletonFactory) DefaultSingletonBeanRegistry中的方法;
+     * 可以看出这个 默认的单例bean注册中心; 维护了单例池; 单例对象工厂;
+     * 加锁, 同步所有线程的方法, singletonObjects 单例池:
+     * singletonFactories.put(beanName, singletonFactory);
+     * earlySingletonObjects.remove(beanName); 但是这个好像是没有值的? 那么问题来了这个 earlySingletonObjects 是淦什么用的?
+     * registeredSingletons.set(beanName) 把这个单例bean放入已经注册池中;
+     * <p>
+     * <p>
      * 后面就开始填充bean属性, 然后 initializeBean()
-     *
+     * <p>
      * afterSingletonCreation(beanName): 这就是把正在创建的单例直接移除;
-     *
+     * <p>
      * addSingleton(bean, singleton):
      * 单例池put;
      * 单例工厂remove;
@@ -346,13 +349,144 @@ public class AnnotationConfigApplicationContextTest {
     }
 
 
+    /**
+     * Spring 创建整个bean的 生命周期 需要很多任务
+     * 但是总归都要进行创建对象
+     * 创建对象提供了 3种 大类方法;
+     *
+     * 注意看这个类的doc, 这个类的设计; 模板实现,
+     * AbstractBeanFactory 这个抽象的bean工厂; 聚合了 SingletonRegistry; ConfigurableBeanFactory;
+     *
+     *
+     */
+    @Test
+    public void initializeSingletonTest() {
+        DefaultListableBeanFactory beanFactory = new DefaultListableBeanFactory();
+        AnnotatedGenericBeanDefinition beanDefinition = new AnnotatedGenericBeanDefinition(A.class);
+        AnnotationBeanNameGenerator nameGenerator = new AnnotationBeanNameGenerator();
+        String beanName = nameGenerator.generateBeanName(beanDefinition, beanFactory);
+        beanFactory.registerBeanDefinition(beanName, beanDefinition);
+
+        A bean = beanFactory.getBean(A.class);
+        assert bean != null;
+    }
+
+
+    /**
+     * {@link org.springframework.beans.factory.ListableBeanFactory#getBeanNamesForType(ResolvableType)}
+     * 有一个方法被Spring 经常用到, getBeanNamesForType(requiredType);
+     *
+     */
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    // -------------- Class 相关的操作 ---------------------------------------------------------------
+
+
     @Test
     public void classTest() {
         // public, protected, private, final, static, abstract and interface;
         int modifiers = AnnotationConfigApplicationContextTest.class.getModifiers();
         System.out.println(modifiers);
-
         System.out.println("is public: " + Modifier.isPublic(modifiers));
     }
 
+    /**
+     * <pre class="code">
+     * private HashMap&lt;Integer, List&lt;String&gt;&gt; myMap;
+     *
+     * public void example() {
+     *     ResolvableType t = ResolvableType.forField(getClass().getDeclaredField("myMap"));
+     *     t.getSuperType(); // AbstractMap&lt;Integer, List&lt;String&gt;&gt;
+     *     t.asMap(); // Map&lt;Integer, List&lt;String&gt;&gt;
+     *     t.getGeneric(0).resolve(); // Integer
+     *     t.getGeneric(1).resolve(); // List
+     *     t.getGeneric(1); // List&lt;String&gt;
+     *     t.resolveGeneric(1, 0); // String
+     * }
+     * </pre>
+     */
+    private HashMap<Integer, List<String>> myMap;
+
+    /**
+     * {@link ResolvableType}
+     */
+    @Test
+    public void resolvableTypeTest() throws NoSuchFieldException {
+//        ResolvableType resolvableType = ResolvableType.forRawClass(A.class);
+        ResolvableType t = ResolvableType.forField(getClass().getField("myMap"));
+        ResolvableType superType = t.getSuperType();
+        ResolvableType resolvableType = t.asMap();
+
+        Class<?> resolve = t.getGeneric(0).resolve();
+        Class<?> resolve2 = t.getGeneric(1).resolve();
+
+        ResolvableType generic = t.getGeneric(1);
+
+        Class<?> aClass = t.resolveGeneric(1, 0);
+    }
+
+    /**
+     * 仅仅看这个对象的docment;
+     * encapsulates a java type, providing access to
+     * supertypes, interfaces, parameters,  resolve()
+     * 方法拿到这个值 可以拿到这个字节码
+     *
+     * 就是用这个字节码对象包装了一下这个可解析的类型;
+     * Class.isAssignableFrom;
+     */
+    @Test
+    public void resolvalbeType2Test() {
+        ResolvableType resolvableType = ResolvableType.forRawClass(A.class);
+        ResolvableType[] interfaces = resolvableType.getInterfaces();
+        for (ResolvableType anInterface : interfaces) {
+            System.out.println(anInterface.resolve().getName());
+        }
+
+        assert resolvableType != null;
+    }
 }

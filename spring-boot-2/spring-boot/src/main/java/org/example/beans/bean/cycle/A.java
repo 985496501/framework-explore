@@ -3,6 +3,8 @@ package org.example.beans.bean.cycle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+
 /**
  * 如果直接使用 构造方法 的情况 循环依赖无法解除<   可以只用注解注入的方式注入;
  *
@@ -14,8 +16,7 @@ import org.springframework.stereotype.Service;
  * @date: 2021/4/27
  */
 @Service
-public class A {
+public class A implements Serializable {
     @Autowired
     private B b;
-
 }

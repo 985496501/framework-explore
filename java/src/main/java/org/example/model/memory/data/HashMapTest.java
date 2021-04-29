@@ -2,10 +2,7 @@ package org.example.model.memory.data;
 
 import org.junit.Test;
 
-import java.util.AbstractMap;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 /**
  * This class provides a skeletal implementation of the Map interface, to minimize
@@ -40,7 +37,7 @@ public class HashMapTest {
          * 主要就是看它的put(k, v):
          * 1. 首先调用了 hash(key)
          * 2. putVal(hashVal, key, value, onlyIfAbsent false, evict true)
-         *    这个方法是final 方法, onlyIfAbsent 代表如果没有这个key才会塞进去, 写死false, 说明会覆盖\
+         *    这个方法是final 方法, onlyIfAbsent 代表如果没有这个key才会塞进去, 写死false, 说明会覆盖
          *    evict: false, this table is in creation mode. todo: evict 到底搞啥东西?
          *
          *    下面开始无情的判断了; 首先定义了一个内置Node 结构体, 实现了Entry, 重写了3个方法, 4个属性值, hash, key, value, next;
@@ -48,9 +45,37 @@ public class HashMapTest {
          *    1. 创建了一个 Node数组 变量, 一个临时节点 Node, n 数组长度, i 具体是哪个索引
          *    如果还没有创建这个数组 就会创建这个数组, 调用数组的方法 resize() 方法,
          *
-         *    通过 散列表 table 确定这个长度是 2^n  让它-1 & hash 获取它的hash bin的坐标判断如果这个坐标没有值
+         *    通过 散列表 table 确定这个长度是 2^n  让它  (size-1) & hash 获取它的hash,   p = table[i]
+         *    1> if p = null 创建一个Node塞进去;
+         *    2> if p != null, 创建一个新的Node e
+         *      2.1> if hash(p) == hash(e.key) && (key == key || equals())  e=p; 直接将e指向原来的p Node
+         *          最后会拿到e.value 也就是就的value, 如果原来的value=null 或者 允许覆盖 就直接把新的 value 覆盖;
+         *          afterNodeAccess(e): node获取之后的操作... 什么也没做.... 交给子类实现;
+         *          将替换掉的 oldVal 直接返回; 因为是覆盖, 所以下面的逻辑，修改结果的次数, table Size, resize() 都不用操作;
+         *      2.2> p 是 TreeNode 类型吗? 一般往里面塞入, 不会类型转换 TreeNode 是 entry类型, entry是Node类型
+         *
+         *      2.3> e = p.next, p=e,  除了数组中的那个Node 坐标为-1吧, 然后启动一个计数器, TREEIFY_THRESHOLD = 8.
+         *           binCount >= 7; -1 0 1 ... 5;  一个bin的链长度达到7 就会树化; e=null; 直接下面的是否resize()
+         *           这里就看出 算法的功底了, 使用了双指针 p e 完成了所有的操作, 真的特别舒服; 就是链表的长度exclude(table[i])
+         *           == treeify_threshold, 就会发生树化, treeifyBin(tab, hash); 针对 table[] 对应的hash 进行 treeify
+         *          todo: treeify()
+         *
+         *
          *    那我就创建一个node, 设置这个值;
          *    ++ modCount; 记录这个 散列表
+         *    ++ size 这个就是entry的大小;
+         *    同时会比较size 和  threshold 的值, capacity*loadFactor的大小 就是这个阈值 等于整个容量的3/4 就会重新hash table;
+         *    初始capacity=16  threshold=9
+         *    初始的table[16] 0 1 ... 15; if hash() 算法非常好, 让10个值分别处于10个bin, 那么就会出现 resize();
+         *          仅仅是数组的resize() 一次扩容为原来的2倍 table[32] 然后 threshold = 24
+         *    必须是 size 严格 > threshold, 才会 resize(), 这个resize() 是插入之后发生的. 还是插入之后大于 threshold 才会resize();
+         *          todo: resize()
+         *    然后调用afterNodeInsertion(evict); 这是一个空实现, 没有做任何操作, 看了下它子类实现大体是淘汰
+         *    最早的数据;
+         *
+         *    2.
+         *
+         *
          *
          *
          *
@@ -60,11 +85,13 @@ public class HashMapTest {
          *
          * 3. 必不可少的方法 resize() 方法, 这个方法显然就是创建 和 扩容 Node<K, V>[] 的;
          *   先看创建数组的逻辑:
-         *   oldThr 默认就是16 这边判断这个值>0 就把这个值设置成新的newCap
+         *   3.1> oldThr 默认就是16 这边判断这个值>0 就把这个值设置成新的newCap
          *   newThr 没有设置值, ft = 16 * 0.75 = 9   newThr = 9
          *   然后创建 一个 newCap的node[] 让table= newTab
          *   如果老的table不是空的说明这个需要扩容, todo: 需要执行其他任务
          *   否则  就把初始化的数组 直接返回;
+         *   3.2> 如果capacity > threshold 就 resize()
+         *   直接 oldTab;  newTab = new Node(newCap)
          *
          *
          *
@@ -75,6 +102,16 @@ public class HashMapTest {
          */
         Map<String, String> map = new HashMap<>(16);
         map.put("name", "jinyun liu");
+    }
+
+
+    @Test
+    public void andTest() {
+        // 任何数和 & 运算是  比如15;
+        Random random = new Random();
+        for (int i = 0; i < 10; i++) {
+            System.out.println(random.nextInt() & 15);
+        }
     }
 
 

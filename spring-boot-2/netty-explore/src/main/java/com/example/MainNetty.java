@@ -61,7 +61,7 @@ public class MainNetty {
     public static void main(String[] args) {
         // 线程的最大效率：　那个公式 看下操作系统的课本 学习下操作系统回去 2021-4-23
         // thread: boss-poolId-nextId, 仅仅会有一个boss-1-1 RUNNING, 这个nthreads 你无论传什么 都是1
-        NioEventLoopGroup bossGroup = new NioEventLoopGroup(new DefaultThreadFactory("boss"));
+        NioEventLoopGroup bossGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("boss"));
         // 没有工作线程, 应该是懒的, 有任务需求的时候才会创建工作线程
         NioEventLoopGroup workerGroup = new NioEventLoopGroup(4, new DefaultThreadFactory("worker"));
         try {
@@ -80,6 +80,7 @@ public class MainNetty {
                             pipeline.addLast("encoder", new StringEncoder(CharsetUtil.UTF_8));
 
                             channel.pipeline().addLast("stringHandler", new StringChannelInboundHandler());
+//                            new FullHttpMessage()
                         }
                     });
 
@@ -91,7 +92,7 @@ public class MainNetty {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
-
-
     }
+
+
 }

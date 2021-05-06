@@ -25,8 +25,12 @@ import org.springframework.boot.autoconfigure.kafka.KafkaAutoConfiguration;
  * @author: jinyun
  * @date: 2021/2/8
  */
-@SpringBootApplication(exclude = {KafkaAutoConfiguration.class, RedisAutoConfiguration.class, RedissonAutoConfiguration.class,
-        DataSourceAutoConfiguration.class})
+@SpringBootApplication(exclude = {
+        KafkaAutoConfiguration.class,
+        RedisAutoConfiguration.class,
+        RedissonAutoConfiguration.class,
+        DataSourceAutoConfiguration.class
+})
 public class EntryApplication {
     public static void main(String[] args) {
         SpringApplication.run(EntryApplication.class, args);

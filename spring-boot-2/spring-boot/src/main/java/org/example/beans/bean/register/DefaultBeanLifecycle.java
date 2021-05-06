@@ -62,31 +62,31 @@ public class DefaultBeanLifecycle implements Ordered, SmartInitializingSingleton
     @Override
     public void afterPropertiesSet() {
         // 在所有其他属性填充完毕调用这个方法
-        log.error("====> 回调的方法: {}, 次序: {}", "InitializingBean", order.incrementAndGet());
+        log.error("====> 回调的方法: {}, 次序: {}", "InitializingBean ----> ", order.incrementAndGet());
     }
 
     @Override
     public void afterSingletonsInstantiated() {
         // 在整个bean的配置的最后阶段完成这个方法的回调
-        log.error("====> 回调的方法: {}, 次序: {}", "SmartInitializingSingleton", order.incrementAndGet());
+        log.error("====> 回调的方法: {}, 次序: {}", "SmartInitializingSingleton ----> ", order.incrementAndGet());
     }
 
     @Override
     public void destroy() {
         // 关闭应用程序的时候 会销毁所有的bean调用
-        log.error("====> 回调的方法: {}, 次序: {}", "DisposableBean", order.incrementAndGet());
+        log.error("====> 回调的方法: {}, 次序: {}", "DisposableBean ----> ", order.incrementAndGet());
     }
 
     @Override
     public void run(String... args) {
         // 整个应用创建成功之后 发布这个事件
-        log.error("====> 回调的方法: {}, 次序: {}", "CommandLineRunner", order.incrementAndGet());
+        log.error("====> 回调的方法: {}, 次序: {}", "CommandLineRunner ----> ", order.incrementAndGet());
     }
 
     @Override
     public int getOrder() {
         // bean的实例化的顺序
-        log.error("====> 回调的方法: {}, 次序: {}", "CommandLineRunner", order.incrementAndGet());
+        log.error("====> 回调的方法: {}, 次序: {}", "CommandLineRunner ----> ", order.incrementAndGet());
         return Ordered.LOWEST_PRECEDENCE;
     }
 

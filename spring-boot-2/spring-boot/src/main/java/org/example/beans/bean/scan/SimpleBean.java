@@ -15,7 +15,7 @@ import java.util.Arrays;
 import java.util.concurrent.atomic.AtomicInteger;
 
 /**
- * <a ref="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans">link</a>
+ * <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/core.html#beans">IOC</a>
  *
  * <p>Lifecycle:</p>
  * w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 1030 ms
@@ -102,7 +102,9 @@ public class SimpleBean implements Ordered, InitializingBean, DisposableBean,
 
     public static void main(String[] args) {
         // original beanName
-        System.out.println(BeanFactoryUtils.originalBeanName("org.example.beans.bean.scan.SimpleBean"));
+
+        // BeanFactoryUtils.originalBeanName("") GENARATED_BEAN_NAME_SEPARATOR
+        System.out.println(BeanFactoryUtils.originalBeanName("org.example.beans.bean.scan.SimpleBean88#Hello"));
     }
 
     @Override

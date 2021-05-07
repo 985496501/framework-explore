@@ -17,6 +17,7 @@ public class TestController {
     private final AtomicInteger requestCount = new AtomicInteger(0);
 
     @GetMapping("getBean")
+//    @ResponseStatus(value = HttpStatus.OK, reason = "哈拉少")
     public Map<String, String> getBean(Integer id) {
         Map<String, String> mp =  new HashMap<>(2);
         mp.put("name", "org.example.mvc.controller.TestController.getBean");

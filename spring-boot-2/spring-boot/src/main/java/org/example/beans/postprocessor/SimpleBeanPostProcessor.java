@@ -3,7 +3,6 @@ package org.example.beans.postprocessor;
 import org.example.beans.bean.scan.SimpleBean;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.stereotype.Component;
 
 /**
  * Deprecated:
@@ -12,7 +11,7 @@ import org.springframework.stereotype.Component;
  * @author: jinyun
  * @date: 2021/3/16
  */
-@Component
+//@Component
 public class SimpleBeanPostProcessor implements BeanPostProcessor {
     @Override
     public Object postProcessBeforeInitialization(Object bean, String beanName) throws BeansException {

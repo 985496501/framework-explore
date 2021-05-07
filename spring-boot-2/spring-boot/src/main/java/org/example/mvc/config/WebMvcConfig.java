@@ -1,5 +1,6 @@
 package org.example.mvc.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.ListableBeanFactory;
 import org.springframework.boot.autoconfigure.web.ServerProperties;
 import org.springframework.boot.autoconfigure.web.servlet.DispatcherServletAutoConfiguration;
@@ -8,20 +9,33 @@ import org.springframework.boot.autoconfigure.web.servlet.WebMvcProperties;
 import org.springframework.boot.web.servlet.ServletContextInitializerBeans;
 import org.springframework.boot.web.servlet.context.AnnotationConfigServletWebServerApplicationContext;
 import org.springframework.boot.web.servlet.context.ServletWebServerApplicationContext;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.converter.HttpMessageConverter;
+import org.springframework.http.converter.StringHttpMessageConverter;
+import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.web.WebApplicationInitializer;
+import org.springframework.web.method.HandlerMethod;
+import org.springframework.web.method.support.HandlerMethodReturnValueHandler;
 import org.springframework.web.servlet.DispatcherServlet;
 import org.springframework.web.servlet.HandlerAdapter;
+import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.HandlerMapping;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.ServletContext;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
 
 /**
  * <p>
  * 1. 在这里我们细节的学习 webMVC 相关的配置
  * 首先是Servlet3.0规范, 一个接口 {@link WebApplicationInitializer} spring.framework.web MVC的重要接口
- * 但是我们自定义实现这个接口 然后声明成 spring bean 但是回调方法没有触发 springboot.
- *
- *
+ * 但是我们自定义实现这个接口 然后声明成 spring bean 但是回调方法没有触发 springboot. todo: 回调没有触发!!!
+ * <p>
+ * <p>
  * 这个就是配置自己的servlet {@link DispatcherServlet}, listener, filter
  * 加入到一个 web全局的上下文中去 {@link ServletContext} javax.servlet jdk的规范已经写入了
  *
@@ -41,14 +55,14 @@ import javax.servlet.ServletContext;
  * onRefresh();
  * 我们使用的 {@link AnnotationConfigServletWebServerApplicationContext} 基于注解配置的servlet web服务器应用的上下文
  * 它继承自 {@link ServletWebServerApplicationContext} 它是 servlet web server应用上下文.
- *
+ * <p>
  * ServletWebServletApplicationContext.onRefresh()
  * createServer() [private];
  * -- webServer and servletContext == null, 检索查询webServerFactory
  * 这里知道为什么要使用工厂模式了吗？ 定义创建指定功能的接口进行标记 可以查询出来
  * 具体的子类实现哦，可以忽略具体实现。 定义一个顶级的工厂方法以及生产的这个对象的顶级功能接口。
  * interface ServletWebServerFactory {
- *     WebServer getWebServer(ServletContextInitializer...);
+ * WebServer getWebServer(ServletContextInitializer...);
  * }
  * 通过3个接口规范了这整个 spring 嵌入式容器下的 ServletWebServer.
  * 抽象出这顶级接口之后 spring 实现了3种ServletWebServer
@@ -62,13 +76,13 @@ import javax.servlet.ServletContext;
  * getBeanFactory就是获取上面默认的可列表工厂 getBean(beanName, class) 获取指定名指定类型的bean
  * abstractBeanFactory.doGetBean();
  * DefaultSingletonBeanRegistry.getSingleton(beanName)
- *  单例池里面获取, 如果有直接返回 如果没有就从 创建中返回该对象的提前引用
- *  如果创建中也没有 就从 singletonFactory 中获取工厂方法， 工厂方法获取该对象
- *  然后工厂中remove掉，然后把这个对象添加到正在创建中，并返回。
- *
- *  这里有一个原子操作, 就是map的add remove读写操作多线程会产生并发问题
- *  就在这一系列操作加入了锁.
- *
+ * 单例池里面获取, 如果有直接返回 如果没有就从 创建中返回该对象的提前引用
+ * 如果创建中也没有 就从 singletonFactory 中获取工厂方法， 工厂方法获取该对象
+ * 然后工厂中remove掉，然后把这个对象添加到正在创建中，并返回。
+ * <p>
+ * 这里有一个原子操作, 就是map的add remove读写操作多线程会产生并发问题
+ * 就在这一系列操作加入了锁.
+ * <p>
  * 获取了Undertow的工厂然后创建了ServletWebServer
  * 但是需要 ServletContextInitializer
  *
@@ -76,7 +90,7 @@ import javax.servlet.ServletContext;
  * 我们看下 这个ServletWebServer的启动过程：
  * 1. 创建外部配置的端口是这么传递进去的？
  * 2. spring定义的 javax.servlet.dispatcherServlet是怎么伪装进入ServletContext的？
- *
+ * <p>
  * log:
  * 初始化 WebApplicationContext
  * Root WebApplicationContext:  创建完webServer实例, 仅仅是创建了对象
@@ -88,7 +102,7 @@ import javax.servlet.ServletContext;
  * 这个创建的过程 是通过 beanFactory 获取 所有的 ServletContextInitializer
  * {@link ListableBeanFactory#getBeanNamesForType(java.lang.Class, boolean, boolean) 这个方法返回了
  * dispatcherServletRegistration;
- *
+ * <p>
  * 所有我们要看下这个beanNames是如何初始化的?
  * 原来是自动装配进入的
  * see {@link DispatcherServletAutoConfiguration}
@@ -102,7 +116,7 @@ import javax.servlet.ServletContext;
  * 还可以配置最大头部：
  * 还可以配置undertow的io线程 和 工作线程; 这些线程都是RUNNING状态;
  * 也就是无论有没有请求都在工作.
- *
+ * <p>
  * 通过{@link WebMvcProperties} 配置 DispatcherServlet
  * 1. dispatchOptionsRequest = true 是否转发Options请求 到 frame.doService(), 默认是true
  * 2. dispatchTraceRequest = false 是否转发trace请求 到 doService(), 默认是false
@@ -112,19 +126,53 @@ import javax.servlet.ServletContext;
  *
  *
  * <p>
- *
- *
+ * <p>
+ * <p>
  * {@link }
- *
- *
- *
- *
+ * <p>
+ * <p>
+ * <p>
+ * <p>
+ * doc 上要求 必须加 @EnableWebMvc 我先不加看看是不是有作用
  *
  * @author: Liu Jinyun
  * @date: 2021/4/4/0:10
  */
-public class WebMvcConfig {
-    public static void main(String[] args) {
+//@EnableWebMvc
+@Slf4j
+@Configuration(proxyBeanMethods = false)
+public class WebMvcConfig implements WebMvcConfigurer {
+    @Override
+    public void addInterceptors(InterceptorRegistry registry) {
+        registry.addInterceptor(new HandlerInterceptor() {
+            @Override
+            public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
+                HandlerMethod handlerMethod = (HandlerMethod)handler;
+                log.error("我已经经过 RequestMappingHandlerMapping 找到了 需要的handler : {}, 居然把 handler 直接使用 Object", handler);
+                return true;
+            }
 
+            @Override
+            public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
+                // after rendering the view.
+            }
+        }).addPathPatterns("/getBean");
     }
+
+    @Override
+    public void addReturnValueHandlers(List<HandlerMethodReturnValueHandler> handlers) {
+        // does not work.
+//        handlers.removeIf(next -> !(next instanceof RequestResponseBodyMethodProcessor));
+//        handlers.add(new DataReturnedValueHandler());
+    }
+
+    @Override
+    public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
+        // default converters contain many useless HttpMessageConverters, therefore here evit them.
+        converters.clear();
+        converters.add(new MappingJackson2HttpMessageConverter());
+        converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
+    }
+
+
 }

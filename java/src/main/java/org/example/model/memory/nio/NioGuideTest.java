@@ -29,5 +29,6 @@ public class NioGuideTest {
         byte[] heapMemory = new byte[bytes.length];
         directMemory.get(heapMemory);
         System.out.println(new String(heapMemory));
+        // 直接内存缓冲区, 最好分配大的 生命周期长的缓冲区, zero-copy.
     }
 }

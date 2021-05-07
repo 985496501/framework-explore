@@ -7,7 +7,6 @@ import org.springframework.core.Ordered;
 import org.springframework.core.env.ConfigurableEnvironment;
 import org.springframework.core.env.Environment;
 import org.springframework.core.io.ResourceLoader;
-import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
@@ -40,7 +39,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  * @author: jinyun
  * @date: 2021/3/16
  */
-@Component
+//@Component
 public class SimpleBean implements Ordered, InitializingBean, DisposableBean,
         ApplicationContextAware, BeanNameAware, BeanClassLoaderAware, BeanFactoryAware, EnvironmentAware, ResourceLoaderAware {
 

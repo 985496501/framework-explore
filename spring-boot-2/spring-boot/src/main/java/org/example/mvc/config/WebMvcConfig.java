@@ -166,11 +166,26 @@ public class WebMvcConfig implements WebMvcConfigurer {
 //        handlers.add(new DataReturnedValueHandler());
     }
 
+
+    /**
+     * Content-Type: text/html, fastJson 没有设置charset
+     * Content-Type: text/html; charset=UTF-8 如果设置了charset就会使用这个标识
+     *
+     * Content-Type: application/json 设置jackson 返回的;
+     *
+     * 还是使用 Jackson
+     *
+     * @param converters
+     */
     @Override
     public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
         // default converters contain many useless HttpMessageConverters, therefore here evit them.
         converters.clear();
         converters.add(new MappingJackson2HttpMessageConverter());
+//        FastJsonHttpMessageConverter fastJsonHttpMessageConverter = new FastJsonHttpMessageConverter();
+//        fastJsonHttpMessageConverter.setSupportedMediaTypes(Collections.singletonList(MediaType.APPLICATION_JSON));
+//        fastJsonHttpMessageConverter.setDefaultCharset(StandardCharsets.UTF_8);
+//        converters.add(fastJsonHttpMessageConverter);
         converters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
     }
 

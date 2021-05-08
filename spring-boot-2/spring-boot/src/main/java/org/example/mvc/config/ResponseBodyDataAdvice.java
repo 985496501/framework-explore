@@ -1,40 +1,30 @@
 package org.example.mvc.config;
 
 import org.example.mvc.data.ResponseData;
-import org.springframework.beans.factory.BeanFactory;
-import org.springframework.beans.factory.BeanFactoryAware;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
-import org.springframework.stereotype.Component;
-import org.springframework.util.ClassUtils;
-import org.springframework.web.servlet.mvc.method.annotation.JsonViewRequestBodyAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.JsonViewResponseBodyAdvice;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
 
-import java.util.Arrays;
-import java.util.Collections;
-
 /**
+ * 妈的  我实现怎么都不行  看了网上的教程 使用这个注解就可以 {@link ControllerAdvice}
+ *
  * @author: jinyun
  * @date: 2021/5/7
  */
-@Component
-public class ResponseBodyDataAdvice implements ResponseBodyAdvice, CommandLineRunner, BeanFactoryAware {
-    public static final boolean jackson2Present;
+@RestControllerAdvice
+public class ResponseBodyDataAdvice implements ResponseBodyAdvice {
 
-    static {
-        jackson2Present = ClassUtils.isPresent("com.fasterxml.jackson.databind.ObjectMapper", ResponseBodyDataAdvice.class.getClassLoader()) &&
-                ClassUtils.isPresent("com.fasterxml.jackson.core.JsonGenerator", ResponseBodyDataAdvice.class.getClassLoader());
-    }
-
-
-    private BeanFactory beanFactory;
-
+    /**
+     * @param returnType    返回值的类型;
+     * @param converterType 转换器的类型;
+     * @return
+     */
     @Override
     public boolean supports(MethodParameter returnType, Class converterType) {
         return true;
@@ -50,18 +40,15 @@ public class ResponseBodyDataAdvice implements ResponseBodyAdvice, CommandLineRu
         return objectResponseData;
     }
 
-    @Override
-    public void run(String... args) {
-        RequestMappingHandlerAdapter bean = beanFactory.getBean(RequestMappingHandlerAdapter.class);
 
-        if (jackson2Present) {
-            bean.setRequestBodyAdvice(Collections.singletonList(new JsonViewRequestBodyAdvice()));
-            bean.setResponseBodyAdvice(Arrays.asList(new JsonViewResponseBodyAdvice(), this));
-        }
+    @ExceptionHandler(ClassCastException.class)
+    public ResponseData classCastExceptionHandler(ClassCastException e) {
+        ResponseData<Object> objectResponseData = new ResponseData<>();
+        objectResponseData.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
+        objectResponseData.setMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());
+        objectResponseData.setData(e.getMessage());
+        return objectResponseData;
     }
 
-    @Override
-    public void setBeanFactory(BeanFactory beanFactory) {
-        this.beanFactory = beanFactory;
-    }
+
 }

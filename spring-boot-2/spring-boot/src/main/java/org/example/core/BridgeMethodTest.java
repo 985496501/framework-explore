@@ -40,8 +40,7 @@ public class BridgeMethodTest {
     public void syntheticMethodTest() {
         Evaluation e = new VIPEvaluation();
         e.evaluate(new VIP());
-
-        e.evaluate(new NoVIP());
+//        e.evaluate(new NoVIP());
     }
 
 
@@ -53,7 +52,6 @@ public class BridgeMethodTest {
      * nested inner class, BridgeMethodTest$VIP named.
      */
     class VIP implements Customer {
-
         @Override
         public void consume() {
             System.out.println("VIP消费....");

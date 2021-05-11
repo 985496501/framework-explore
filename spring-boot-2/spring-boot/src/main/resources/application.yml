@@ -1,6 +1,6 @@
 server: # ServerProperties 配置ServletWebServer
   max-http-header-size: 8KB
-  port: 8080  # server http port
+  port: 9991  # server http port
   compression:
     enabled: true # default false
   ssl:

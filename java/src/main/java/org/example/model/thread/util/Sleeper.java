@@ -14,13 +14,13 @@ public class Sleeper {
      * 本地方法实现：应该是把此线程放入sleep线程队列里面, 通过timer的不断扫描, 自动将 thread加入就绪状态,
      * 等待OS的调度执行.
      *
-     * @param second
+     * @param second s
      */
     public static void sleep(int second) {
         try {
             TimeUnit.SECONDS.sleep(second);
         } catch (InterruptedException e) {
-            System.out.println("线程中断");
+            System.out.println("线程中断.... 我被打断了");
         }
     }
 }

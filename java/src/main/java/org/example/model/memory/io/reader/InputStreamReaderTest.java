@@ -2,12 +2,6 @@ package org.example.model.memory.io.reader;
 
 import org.junit.Test;
 
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.io.UnsupportedEncodingException;
-import java.nio.charset.Charset;
-import java.nio.charset.CharsetDecoder;
-
 /**
  * IO流 是操作系统中非常重要的资源
  * 也是非常影响计算机性能的因素, 处理好IO能显著提高应用的性能, 都是同步IO, IO的序列是有序的, 并且计算机进行IO的时候,
@@ -29,30 +23,5 @@ public class InputStreamReaderTest {
     @Test
     public void inputSteamReaderTest() {
 
-    }
-
-    /**
-     * Reader:
-     * 输入流读取器, 在feign
-     *
-     *
-     */
-    static class DefaultInputStreamReader extends InputStreamReader {
-
-        public DefaultInputStreamReader(InputStream in) {
-            super(in);
-        }
-
-        public DefaultInputStreamReader(InputStream in, String charsetName) throws UnsupportedEncodingException {
-            super(in, charsetName);
-        }
-
-        public DefaultInputStreamReader(InputStream in, Charset cs) {
-            super(in, cs);
-        }
-
-        public DefaultInputStreamReader(InputStream in, CharsetDecoder dec) {
-            super(in, dec);
-        }
     }
 }

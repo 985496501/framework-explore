@@ -3,6 +3,9 @@ package org.example.model.memory.io.stream;
 import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 
 /**
@@ -33,6 +36,15 @@ public class OutputStreamTest {
         byteArrayOutputStream.write(bytes, 0, bytes.length);
 
         System.out.println(new String(byteArrayOutputStream.toByteArray(), StandardCharsets.UTF_8));
+
+        // 需要一个具备写入物理设备的 输出流进行真正的写出 FileOutputStream 它会系统调用文件系统的 open() 方法;
+        try (FileOutputStream fileOutputStream = new FileOutputStream("E:\\learning\\framework\\java\\src\\main\\java\\org\\example\\model\\memory\\io\\stream\\temp\\1.txt", true)) {
+            byteArrayOutputStream.writeTo(fileOutputStream);
+        } catch (FileNotFoundException e) {
+            System.out.println("file 没有找到...");
+        } catch (IOException e) {
+            System.out.println("发生了 未知 的IO 异常...");
+        }
     }
 
 }

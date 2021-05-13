@@ -14,7 +14,7 @@ server: # ServerProperties 配置ServletWebServer
 
 spring:
   application:
-    name: im
+    name: entry
 
   #security的配置
   security:
@@ -38,13 +38,12 @@ spring:
 
   # rabbitmq configuration.
   rabbitmq:
-    host: 192.168.0.119
+    addresses: 192.168.0.119:5672
     username: xccc
     password: 123456
     virtual-host: /AMQP/
-    # Comma-separated list of addresses to which the client should connect.
-    # when set, the host and port are ignored.
-    addresses: 192.168.0.119:5672
+
+
 
 
   kafka:

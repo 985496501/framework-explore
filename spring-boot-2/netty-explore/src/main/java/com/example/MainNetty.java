@@ -45,6 +45,43 @@ import io.netty.util.concurrent.DefaultThreadFactory;
  *
  *
  *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ *
+ * 使用netty开发一个http2.0协议的server,
+ * springboot是可以使用netty作为内置  server 服务的, 可以玩一下;
+ *
+ *
+ *
+ *
+ *
+ *
+ * 我们画的netty的  <a href="https://www.processon.com/diagraming/5d32e637e4b043dcf83f65de}">事件处理模型</a>
  * @author: jinyun
  * @date: 2021/2/9
  */
@@ -80,7 +117,6 @@ public class MainNetty {
                             pipeline.addLast("encoder", new StringEncoder(CharsetUtil.UTF_8));
 
                             channel.pipeline().addLast("stringHandler", new StringChannelInboundHandler());
-//                            new FullHttpMessage()
                         }
                     });
 

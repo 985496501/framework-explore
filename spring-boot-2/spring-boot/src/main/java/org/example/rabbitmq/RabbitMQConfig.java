@@ -4,10 +4,8 @@ import cn.hutool.json.JSONUtil;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.SocketConfigurator;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.amqp.core.Binding;
-import org.springframework.amqp.core.BindingBuilder;
-import org.springframework.amqp.core.DirectExchange;
-import org.springframework.amqp.core.Queue;
+import org.example.rabbitmq.constant.RabbitMQConstant;
+import org.springframework.amqp.core.*;
 import org.springframework.amqp.rabbit.connection.ConnectionNameStrategy;
 import org.springframework.amqp.rabbit.connection.PooledChannelConnectionFactory;
 import org.springframework.boot.autoconfigure.amqp.RabbitProperties;
@@ -16,7 +14,12 @@ import org.springframework.boot.context.properties.PropertyMapper;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.util.HashMap;
+
 /**
+ * {@link org.springframework.boot.autoconfigure.amqp.RabbitAutoConfiguration}
+ *
+ *
  * 配置MQ相关
  * <p>
  * RabbitMQ host. Ignored if an address is set.
@@ -156,23 +159,115 @@ public class RabbitMQConfig {
         }
     }
 
-    /**
-     * declare a queue named with entry.
-     *
-     * @return queue.
-     */
-    @Bean
-    public Queue queue() {
-        return new Queue(RabbitMQConstant.queue);
+
+    @Configuration
+    public static class QueueConfigurer {
+        /**
+         * declare a queue named with entry.
+         *
+         * @return queue.
+         */
+        @Bean
+        public Queue queue() {
+            HashMap<String, Object> extensionAttr = new HashMap<>(2);
+            extensionAttr.put(QueueAttrExtension.X_DEAD_LETTER_EXCHANGE, RabbitMQConstant.DEFAULT_TOPIC_EXCHANGE);
+            extensionAttr.put(QueueAttrExtension.X_DEAD_LETTER_ROUTING_KEY, RabbitMQConstant.DEAD_QUEUE);
+            return new Queue(RabbitMQConstant.QUEUE, true, false, false, extensionAttr);
+        }
+
+        /**
+         * 使用延迟队列有一个非常大的缺点 就是延迟时间不能修改, 这就坏掉了啊
+         * <p>
+         * Parameter Template:
+         *
+         * <ol>
+         *     <li><strong>name:</strong> the name of the queue - must not be null; (队列的名字一定不能为空, 因为大多数情况下这个队列名字充当 RoutingKey 的作用)</li>
+         *     <li>durable: whether or not persistent the message, must be true</li>
+         *     <li>exclusive: whether or not exclude others, must be false. The lifecycle of queue is sync with the Connection.
+         *          If the connection disconnects to the RabbitMQ broker, the queue here declared will be deleted.
+         *     </li>
+         *     <li>autoDelete: whether or not automatically delete the message, must be false</li>
+         *     <li>arguments: extensive attrs.</li>
+         * </ol>
+         * see {@link QueueAttrExtension}
+         *
+         * @return queue named by {@link RabbitMQConstant#DELAY_QUEUE}
+         */
+        //@Bean
+        @Deprecated
+        public Queue delayQueue() {
+            HashMap<String, Object> extensionAttr = new HashMap<>(4);
+            extensionAttr.put(QueueAttrExtension.X_MESSAGE_TTL, 30 * 1000);
+            extensionAttr.put(QueueAttrExtension.X_DEAD_LETTER_EXCHANGE, RabbitMQConstant.DEFAULT_TOPIC_EXCHANGE);
+            extensionAttr.put(QueueAttrExtension.X_DEAD_LETTER_ROUTING_KEY, RabbitMQConstant.DEAD_QUEUE);
+            return new Queue(RabbitMQConstant.DELAY_QUEUE, true, false, false, extensionAttr);
+        }
+
+        /**
+         * 声明一个死信队列
+         *
+         * @return dead queue
+         */
+        @Bean
+        public Queue deadQueue() {
+            return new Queue(RabbitMQConstant.DEAD_QUEUE);
+        }
+
+        /**
+         * bind queue to a directExchange named with amq.direct
+         *
+         * @return binding
+         */
+        @Bean
+        public Binding binding() {
+            return BindingBuilder.bind(queue()).to(new DirectExchange(RabbitMQConstant.DIRECT_EXCHANGE))
+                    .withQueueName();
+        }
+
+        //@Bean
+        public Binding delayQueueBinding() {
+            return BindingBuilder.bind(delayQueue()).to(new DirectExchange(RabbitMQConstant.DIRECT_EXCHANGE))
+                    .withQueueName();
+        }
+
+        @Bean
+        public Binding deadQueueBinding() {
+            return BindingBuilder.bind(deadQueue()).to(new TopicExchange(RabbitMQConstant.DEFAULT_TOPIC_EXCHANGE))
+                    .with(RabbitMQConstant.DEAD_QUEUE);
+        }
+
+
+        /**
+         * arguments：队列的其他属性参数，有如下可选项，可参看图2的arguments：
+         * （1）x-message-ttl：消息的过期时间，单位：毫秒；
+         * （2）x-expires：队列过期时间，队列在多长时间未被访问将被删除，单位：毫秒；
+         * （3）x-max-length：队列最大长度，超过该最大值，则将从队列头部开始删除消息；
+         * （4）x-max-length-bytes：队列消息内容占用最大空间，受限于内存大小，超过该阈值则从队列头部开始删除消息；
+         * （5）x-overflow：设置队列溢出行为。这决定了当达到队列的最大长度时消息会发生什么。有效值是drop-head、reject-publish或reject-publish-dlx。仲裁队列类型仅支持drop-head；
+         * （6）x-dead-letter-exchange：死信交换器名称，过期或被删除（因队列长度超长或因空间超出阈值）的消息可指定发送到该交换器中；
+         * （7）x-dead-letter-routing-key：死信消息路由键，在消息发送到死信交换器时会使用该路由键，如果不设置，则使用消息的原来的路由键值
+         * （8）x-single-active-consumer：表示队列是否是单一活动消费者，true时，注册的消费组内只有一个消费者消费消息，其他被忽略，false时消息循环分发给所有消费者(默认false)
+         * （9）x-max-priority：队列要支持的最大优先级数;如果未设置，队列将不支持消息优先级；
+         * （10）x-queue-mode（Lazy mode）：将队列设置为延迟模式，在磁盘上保留尽可能多的消息，以减少RAM的使用;如果未设置，队列将保留内存缓存以尽可能快地传递消息；
+         * （11）x-queue-master-locator：在集群模式下设置镜像队列的主节点信息。
+         */
+        interface QueueAttrExtension {
+            /**
+             * 消息的过期时间 单位： 毫秒
+             */
+            String X_MESSAGE_TTL = "x-message-ttl";
+
+            /**
+             * 死信交换器名称，过期或被删除（因队列长度超长或因空间超出阈值）的消息可指定发送到该交换器中
+             */
+            String X_DEAD_LETTER_EXCHANGE = "x-dead-letter-exchange";
+
+            /**
+             * 死信消息路由键，在消息发送到死信交换器时会使用该路由键，如果不设置，则使用消息的原来的路由键值
+             */
+            String X_DEAD_LETTER_ROUTING_KEY = "x-dead-letter-routing-key";
+        }
     }
 
-    /**
-     * bind queue to a directExchange named with amq.direct
-     *
-     * @return binding
-     */
-    @Bean
-    public Binding binding() {
-        return BindingBuilder.bind(queue()).to(new DirectExchange(RabbitMQConstant.direct_exchange)).withQueueName();
-    }
+
 }

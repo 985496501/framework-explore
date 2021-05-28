@@ -1,13 +1,19 @@
 package org.example.mvc.controller;
 
 import org.example.mvc.constant.CustomHeader;
+import org.example.mvc.data.RequestData;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Enumeration;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -37,6 +43,12 @@ public class TestController {
         return mp;
     }
 
+    @GetMapping("empty")
+    public void empty() {
+        System.out.println("empty");
+    }
+
+
     @GetMapping("getStr")
     public String getStr() {
         return "hello world";
@@ -45,5 +57,23 @@ public class TestController {
     @GetMapping("getEpt")
     public Exception getException() {
         return new NullPointerException("random exception ...");
+    }
+
+
+    @PostMapping("list")
+    public void getList(@RequestBody List<RequestData> list) {
+        ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        assert servletRequestAttributes != null;
+        HttpServletRequest request = servletRequestAttributes.getRequest();
+        Enumeration<String> headers = request.getHeaders("X-Lightchain-Track");
+
+        while (headers.hasMoreElements()) {
+
+        }
+
+        String header = request.getHeader("X-Lightchain-Track");
+        System.out.println(header);
+
+        list.forEach(System.out::println);
     }
 }

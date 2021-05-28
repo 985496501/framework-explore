@@ -18,7 +18,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * @date: 2021/5/7
  */
 @RestControllerAdvice
-public class ResponseBodyDataAdvice implements ResponseBodyAdvice {
+public class ResponseBodyDataAdvice implements ResponseBodyAdvice<Object> {
 
     /**
      * @param returnType    返回值的类型;
@@ -42,7 +42,7 @@ public class ResponseBodyDataAdvice implements ResponseBodyAdvice {
 
 
     @ExceptionHandler(ClassCastException.class)
-    public ResponseData classCastExceptionHandler(ClassCastException e) {
+    public Object classCastExceptionHandler(ClassCastException e) {
         ResponseData<Object> objectResponseData = new ResponseData<>();
         objectResponseData.setCode(HttpStatus.INTERNAL_SERVER_ERROR.value());
         objectResponseData.setMessage(HttpStatus.INTERNAL_SERVER_ERROR.getReasonPhrase());

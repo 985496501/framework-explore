@@ -1,6 +1,5 @@
 package org.test.bootstrap;
 
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.context.EnvironmentAware;
 import org.springframework.core.Ordered;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Component;
  * @date: 2021/4/15
  */
 //@Profile("dev")
-@Slf4j
 @Component
 public class BootstrapLogger implements EnvironmentAware, SmartInitializingSingleton, Ordered {
     private static final String TEMPLATE = "---application：{} --- port：{} --- environment：{} --- VM options: {}";

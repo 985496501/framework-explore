@@ -35,11 +35,11 @@
             <artifactId>caffeine</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.example</groupId>
-            <artifactId>test-starter</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
+<!--        <dependency>-->
+<!--            <groupId>org.example</groupId>-->
+<!--            <artifactId>test-starter</artifactId>-->
+<!--            <version>1.0-SNAPSHOT</version>-->
+<!--        </dependency>-->
 
         <dependency>
             <groupId>org.redisson</groupId>
@@ -173,8 +173,15 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.4.0</version>
+                <version>2.4.5</version>
+
+                <!--peizhi -->
                 <configuration>
+                    <docker>
+                        <host>http://8.136.103.221:2375</host>
+                        <tlsVerify>false</tlsVerify>
+                    </docker>
+                    <imageName>${project.artifactId}:latest</imageName>
                     <excludes>
                         <!--打包屏蔽这个扫描 提醒-->
                         <exclude>
@@ -183,6 +190,7 @@
                         </exclude>
                     </excludes>
                 </configuration>
+
             </plugin>
         </plugins>
     </build>

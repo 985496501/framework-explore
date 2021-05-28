@@ -1,4 +1,4 @@
-package org.test.auto;
+package auto;
 
 import org.junit.Test;
 import org.springframework.cloud.gateway.support.StringToZonedDateTimeConverter;

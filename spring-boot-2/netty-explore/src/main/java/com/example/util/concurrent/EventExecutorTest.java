@@ -2,6 +2,8 @@ package com.example.util.concurrent;
 
 import org.junit.Test;
 
+import java.nio.charset.Charset;
+
 /**
  * netty 对 事件执行器 的抽象
  *
@@ -16,6 +18,7 @@ public class EventExecutorTest {
      */
     @Test
     public void singleThreadEventExecutorTest() {
+        System.out.println(Charset.defaultCharset().name());
     }
 
 

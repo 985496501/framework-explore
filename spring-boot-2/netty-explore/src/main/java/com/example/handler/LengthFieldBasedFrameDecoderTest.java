@@ -11,6 +11,7 @@ import org.junit.Test;
  */
 public class LengthFieldBasedFrameDecoderTest {
 
+
     /**
      * 用于解决粘包的情况, 出现粘包的情况, 就是客户端开启了 nagle 算法:
      * 1. 发送的数据包如果达到了允许的最大报文长度, 这个是建立握手的时候, 双方发送option选型里面携带的信息, 会创建一个min(s,c)

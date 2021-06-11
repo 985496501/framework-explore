@@ -5,8 +5,8 @@ import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import io.netty.handler.codec.LengthFieldBasedFrameDecoder;
 import io.netty.handler.codec.string.StringDecoder;
+import io.netty.handler.codec.string.StringEncoder;
 import io.netty.handler.logging.LogLevel;
 import io.netty.handler.logging.LoggingHandler;
 import io.netty.util.CharsetUtil;
@@ -31,55 +31,17 @@ import io.netty.util.concurrent.DefaultThreadFactory;
  * <p>
  * netty对粘包 拆包 的支持：
  *
- *
  * <p>
  * Netty的架构设计, 接口的分层设计
  * <p>
  * <p>
  * 首先提出问题
  *
- *
- *
  * <a href="https://www.wireshark.org/download.html">抓包工具</a>
  * 什么时候这个抓包工具适配了 MAC OS,  arm版本 我就买MAC
  * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
  * 使用netty开发一个http2.0协议的server,
  * springboot是可以使用netty作为内置  server 服务的, 可以玩一下;
- * <p>
- * <p>
- * <p>
- * <p>
- * <p>
  * <p>
  * 我们画的netty的  <a href="https://www.processon.com/diagraming/5d32e637e4b043dcf83f65de}">事件处理模型</a>
  *
@@ -102,6 +64,7 @@ public class NettyServer {
         NioEventLoopGroup bossGroup = new NioEventLoopGroup(1, new DefaultThreadFactory("boss"));
         // 没有工作线程, 应该是懒的, 有任务需求的时候才会创建工作线程
         NioEventLoopGroup workerGroup = new NioEventLoopGroup(4, new DefaultThreadFactory("worker"));
+
         try {
             ServerBootstrap b = new ServerBootstrap();
             b.group(bossGroup, workerGroup)
@@ -112,16 +75,17 @@ public class NettyServer {
                         @Override
                         protected void initChannel(Channel channel) {
                             ChannelPipeline pipeline = channel.pipeline();
-                            pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(8, 0, 2, 0, 2));
-//                            pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
+                            // pipeline.addLast("frameDecoder", new LengthFieldBasedFrameDecoder(8, 0, 2, 0, 2));
+                            // pipeline.addLast("frameEncoder", new LengthFieldPrepender(4));
                             pipeline.addLast("decoder", new StringDecoder(CharsetUtil.UTF_8));
-//                            pipeline.addLast("encoder", new StringEncoder(CharsetUtil.UTF_8));
-//               channel.pipeline().addLast(new ByteArrayChannelInboundHandler());
+                            pipeline.addLast("encoder", new StringEncoder(CharsetUtil.UTF_8));
+                            // channel.pipeline().addLast(new ByteArrayChannelInboundHandler());
                             channel.pipeline().addLast("stringHandler", new StringChannelInboundHandler());
                         }
                     });
             ChannelFuture f = b.bind(9632).sync();
-            f.channel().closeFuture().sync(); // main 线程wait, 等待关闭唤醒
+            // main 线程wait, 等待关闭唤醒
+            f.channel().closeFuture().sync();
         } catch (InterruptedException e) {
             e.printStackTrace();
         } finally {

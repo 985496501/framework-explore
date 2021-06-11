@@ -6,59 +6,35 @@ spring:
     name: gateway
 
   cloud:
-    # 这个是gateway的核心配置
     gateway:
-      # 有个快捷方法 我们使用一个 DiscoveryClient, 这个作用;
       discovery:
         locator:
           enabled: true
-
-      # retain path
-#      predicate:
-#        after:
-#          enabled: false
-#        before:
-#          enabled: false
-#        between:
-#          enabled: false
-#        cookie:
-#          enabled: false
-#        header:
-#          enabled: false
-#        host:
-#          enabled: false
-#        method:
-#          enabled: false
-#        query:
-#          enabled: false
-#        remote-addr:
-#          enabled: false
-#        weight:
-#          enabled: false
-#        # 看下下面这两个 Predicate
-#        cloud-foundry-route-service:
-#          enabled: false
-#        read-body:
-#          enabled: false
-
-#      routes:
-#        # http://localhost:8181/baidu 会直接路由到百度
-#        - id: 'path_route'
-#          uri: 'https://www.baidu.com'
-#          order: 0
-#          predicates:
-#          # Map<String, String> uriVariables = ServerWebExchangeUtils.getPathPredicateVariables(exchange);
-#          - Path=/baidu,/google/{segment}
-#          filters:
-#          - StripPrefix=1
-#        - id: 'provider_path_route'
-#          uri: lb://provider
-#          order: 1
-#          predicates:
-#            - Path=/provider/**
-#          filters:
-#            - StripPrefix=1
-
+      predicate:
+        after:
+          enabled: false
+        before:
+          enabled: false
+        between:
+          enabled: false
+        cookie:
+          enabled: false
+        header:
+          enabled: false
+        host:
+          enabled: false
+        method:
+          enabled: false
+        query:
+          enabled: false
+        remote-addr:
+          enabled: false
+        weight:
+          enabled: false
+        cloud-foundry-route-service:
+          enabled: false
+        read-body:
+          enabled: false
 
 
       # 等等默认是没有用到

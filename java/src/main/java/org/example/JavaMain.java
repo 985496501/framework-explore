@@ -28,10 +28,8 @@ public class JavaMain {
         // hello
         // world
         System.out.println("hello \nworld");
-
         // 回车将标签方法左边界，但是不换行
         System.out.println("hello \r    world");
-
         System.out.println("hello \n\r world");
     }
 }

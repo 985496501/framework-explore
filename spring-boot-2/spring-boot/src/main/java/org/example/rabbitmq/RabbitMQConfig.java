@@ -1,6 +1,5 @@
 package org.example.rabbitmq;
 
-import cn.hutool.json.JSONUtil;
 import com.rabbitmq.client.ConnectionFactory;
 import com.rabbitmq.client.SocketConfigurator;
 import lombok.extern.slf4j.Slf4j;
@@ -148,7 +147,7 @@ public class RabbitMQConfig {
             });
 
             ConnectionFactory rabbitConnectionFactory = factory.getRabbitConnectionFactory();
-            log.info("{}", JSONUtil.toJsonPrettyStr(rabbitConnectionFactory));
+//            log.info("{}", JSONUtil.toJsonPrettyStr(rabbitConnectionFactory));
             return factory;
         }
 
